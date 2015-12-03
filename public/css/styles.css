@@ -1,0 +1,193 @@
+body {
+	margin:0;
+	padding:0;
+	font-family: Arial;
+	background: #F0FAFC;
+	height: 100%;
+}
+#kopfbereich {
+	background-image:url(/pics/top_kl.jpg);
+	background-repeat:no-repeat;
+	height:100px;
+	width: 100%;
+}
+
+
+#termwahl{
+	position: absolute;
+	right: 0px;
+	top: 0px;
+}
+
+			
+#sprache { 
+	position: absolute;   
+	right: 0px; bottom: 0px;
+	font-size:0.8em;	   
+} 
+
+/* ********************************************************
+*                  Anfang - Navigation				       *
+***********************************************************/
+a:link, a:visited {
+	color: #000099; 
+	text-decoration: none;
+}
+	
+a:hover {
+  	color: #FC9B08;
+  	text-decoration:underline;
+}
+
+ul#Navigation {
+	margin-top: 60px; padding: 0.2em;
+	text-align: right;
+}
+  
+ul#Navigation li {
+	list-style: none;
+	display: inline;
+	margin: 0.4em; padding: 0;
+}
+
+ul#Navigation a, ul#Navigation span {
+	padding: 1px 0.6em;
+	text-decoration: none; font-weight: bold;
+	border: 0px solid #66CCFF;
+	border-left-color: #66CCFF; border-top-color:#66CCFF;
+	color: #000000; 
+}
+
+ul#Navigation a:hover, ul#Navigation span {
+	color: #569ad4; background-color: #F0FAFC;
+	padding-top: 5px;
+	padding-bottom: 20px;
+	border-bottom: 20px solid #F0FAFC;
+	border-top: 3px solid #F0FAFC;
+}
+  
+ul#Navigation .active {
+  	border-color: white;
+	border-left-color: black; border-top-color: black;
+	color: #000000; background-color: #F0FAFC;
+	padding-top: 5px;
+	border-bottom: 20px solid #F0FAFC;
+	border-top: 3px solid #F0FAFC;
+
+}
+
+ul#Navigation2 {
+	padding: 0.2em;
+	position: absolute;
+	top: 80px;
+	right: 0px;
+}
+  
+ul#Navigation2 li {
+	list-style: none;
+	display: inline;
+}
+
+ul#Navigation2 a, ul#Navigation2 span {
+	padding: 1px 0.6em;
+	text-decoration: none; font-size: 0.8em;
+	color: #000000; 
+}
+
+ul#Navigation2 a:hover, ul#Navigation span {
+	color: #569ad4;
+}
+  
+ul#Navigation2 .active {
+	color: #000000; background-color: rgba(0,0,0,0);
+	text-decoration: underline;
+}
+
+.live{
+	display: none;
+	width: 100%;
+}
+
+a:hover + .live,.live:hover{
+	display: block;
+	border: 0px;
+	position: absolute;
+	top: 100px;
+	left: 0px;
+	z-index: 100;
+}
+
+
+/* ********************************************************
+*                  Ende - Navigation				       *
+***********************************************************/
+
+
+/* ********************************************************
+*                  Anfang - Einklappbare Infoboxen        *
+***********************************************************/
+
+.dreieck{
+	margin-left: -18px;
+	margin-top: 5px;	
+}
+.dreieckrotate{
+	transform: rotate(180deg);
+	  -ms-transform: rotate(180deg); /* IE 9 */
+	  -moz-transform: rotate(180deg); /* Firefox */
+	  -webkit-transform: rotate(180deg); /* Safari and Chrome */
+	  -o-transform: rotate(180deg); /* Opera */
+  	margin-top: 5px;	
+}
+		
+.links {
+	float:left;
+	margin: 10px; 
+	margin-top: 32px;
+	margin-left:40px;
+}
+
+.linkshide{
+	float:left;
+	margin: 10px; 
+	margin-top: 32px;
+	margin-left: -10em;
+}
+
+.info {
+	background: -webkit-linear-gradient(#569ad4,#acd8fb); /* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(#569ad4,#acd8fb); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(#569ad4, #acd8fb); /* For Firefox 3.6 to 15 */
+	background: linear-gradient(#569ad4, #acd8fb); /* Standard syntax (must be last) */
+	-webkit-transition: width 1s, height 1s; /* For Safari 3.1 to 6.0 */
+	transition: height 1s ease;
+	margin-top: -3px;
+	width: 10em;
+	height: 1.2em;
+	padding: 15px;
+	padding-top: 9px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	overflow: hidden;
+}
+
+.infohover{
+	height: 35em;
+}
+
+.content {
+	
+	margin-left: 17em;
+}	
+
+.contentbig {
+	margin-left: 3em;
+}		
+
+/* ********************************************************
+*                 Ende - Einklappbare Infoboxen           *
+***********************************************************/

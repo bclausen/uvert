@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>uvert</title>
+		<link rel="stylesheet" href="/css/styles.css">
+	</head>
+	<body>
+	<!-- ANFANG Kopfbereich mit TERMWAHL und MENÜ ANFANG -->
+			
+			<table id="kopfbereich">
+				<div id="termwahl">
+				<%=Term.first(is_active: true).name%>
+				</div>
+				<!--Eine Auswahl an Menüitems mit Pfadangabe, das kann sicher globaler oder eleganter gelöst werden -->
+				<% @menuitems={"Verteilung"=> "/attributions", "Lehrkräfte"=> "/teachers", "Fächer"=> "/subjects", "Klassen"=> "/schoolclasses"}%>
+				<tr>
+					<td> 	
+						<ul id="Navigation">
+							<% @menuitems.each do |key,val| %>
+							<%= "<li><a href="+ val +">"+ key.to_s + "</a></li>" %>
+							<% end %>
+						</ul>
+					</td>
+				</tr>
+			</table>
+
+			<ul id="Navigation2">
+				<li>Nav21</li>
+				<li>Nav22</li>
+				<li>Nav23</li>	
+			</ul>		
+
+	<!-- ENDE Kopfbereich mit TERMWAHL und MENÜ ENDE -->
+
+	<%= yield %>
+	</body>
+</html>
