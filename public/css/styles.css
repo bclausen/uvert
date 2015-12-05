@@ -191,3 +191,18 @@ a:hover + .live,.live:hover{
 /* ********************************************************
 *                 Ende - Einklappbare Infoboxen           *
 ***********************************************************/
+table#attribution {
+   white-space:nowrap;
+}
+
+table#attribution tr:nth-child(even) {
+    background-color: #eee;
+}
+table#attribution tr:nth-child(odd) {
+   background-color:#fff;
+}
+
+ table#attribution tr:hover { 
+  		background: yellow;
+}
+
