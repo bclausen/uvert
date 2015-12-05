@@ -15,19 +15,22 @@
 					<td> 	
 						<%=  subject.name %>
 					</td>
+					<% @subject_teachers=Department.all(:subject_id => subject.id)%>
+					
 					<% @schoolclasses.each do |schoolclass| %>
 						<td>
-							<% @subject_teachers=Department.all(:subject_id => subject.id)%>
-							<select name="<%=(schoolclass.id).to_s+'_'+(subject.id).to_s%>">
-								<% @subject_teachers.each do |teacher| %>
-									<option value="<%=(teacher.teacher_id).to_s%>"><%= Teacher.first(id: teacher.teacher_id).shortcut %></option>
-								<% end %>
-							</select>
 							<% if Profileassignment.first(schoolclass_id: schoolclass.id) != nil then %>
 								<% @profil_id=Profileassignment.first(schoolclass_id: schoolclass.id).profile_id %>
-								<% Profilesubject.all(:profile_id => @profil_id, :subject_id => subject.id).each do |profile_subject| %>
-											<%= profile_subject.hours %>
-								<% end %>
+								<% profilsub = Profilesubject.first(:profile_id => @profil_id, :subject_id => subject.id)%>
+								<% if profilsub != nil then%>
+									<select name="<%=(schoolclass.id).to_s+'_'+(subject.id).to_s%>">
+										<% @subject_teachers.each do |teacher| %>
+											<option value="<%=(teacher.teacher_id).to_s%>"><%= Teacher.first(id: teacher.teacher_id).shortcut %></option>
+										<% end %>
+									</select>
+
+									<%= profilsub.hours %>
+								<%end%>
 							<% end %>
 						</td> 
 					<% end %>
