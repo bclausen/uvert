@@ -24,9 +24,7 @@
 								<% profilsub = Profilesubject.first(:profile_id => @profil_id, :subject_id => subject.id)%>
 								<% if profilsub != nil then%>
 									<select name="<%=(schoolclass.id).to_s+'_'+(subject.id).to_s%>">
-										<% @subject_teachers.each do |teacher| %>
-											<option value="<%=(teacher.teacher_id).to_s%>"><%= Teacher.first(id: teacher.teacher_id).shortcut %></option>
-										<% end %>
+										<%= @options[subject.id] %>
 									</select>
 
 									<%= profilsub.hours %>

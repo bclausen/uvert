@@ -36,6 +36,11 @@ end
 
 get "/attributions" do
 	@attributions = Attribution.all
+	@subjects = Subject.all
+	@options=[]	
+		@subjects.each do |subject|
+			@options[subject.id]=get_subject_teacher_options(subject.id)
+		end
 	erb:attributions
 end
 
@@ -90,3 +95,15 @@ get "/schoolclasses" do
 	erb:schoolclasses
 end
 
+
+def get_subject_teacher_options(id)
+	@subjects = Subject.all(:id => id)
+	@subjectTeacherShortcut=""
+	@subjects.each do |subject|
+	 	@subject_teachers=Department.all(:subject_id => subject.id)
+	 	@subject_teachers.each do |teacher|
+	 		@subjectTeacherShortcut = @subjectTeacherShortcut + "<option value=" + (teacher.teacher_id).to_s+ ">" + Teacher.first(id: teacher.teacher_id).shortcut.to_s + "</option>"
+	 	end
+	end
+	return @subjectTeacherShortcut
+end

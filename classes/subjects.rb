@@ -13,11 +13,17 @@ class Subject
 	property :name, String
 	property :shortcut, String
 
-	has n, :departments
-	has n, :teachers, :through => :departments
+	
 
 	has n, :attributions
 	has n, :teachers, :through => :attributions
 	has n, :profileassignments, :through => :attributions
+
+	has n, :departments
+	has n, :teachers, :through => :departments
+
+	def self.teachers
+		Department.all(:subject_id => self.id)
+	end
 end
 
