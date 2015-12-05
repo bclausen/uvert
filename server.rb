@@ -61,17 +61,17 @@ get "/attributions2" do
 			@subject_teachers=Department.all(:subject_id => subject.id)
 			@attribution_html = @attribution_html + "<td> <select name='" + (schoolclass.id).to_s + "_" +(subject.id).to_s + "' >"
 			#Ab hier verzögert sich das laden der Seite
-			@subject_teachers.each do |teacher|
-				@attribution_html = @attribution_html + "<option value='"+ (teacher.teacher_id).to_s + "'>" + Teacher.first(id: teacher.teacher_id).shortcut + "</option>"
-			end
-			@attribution_html = @attribution_html + "</select>"
-			#Hinzufügen der Stündigkeit (dies hat keinen Einfluss auf die Ladegeschwindigeit)
-			if Profileassignment.first(schoolclass_id: schoolclass.id) != nil then
-				@profil_id=Profileassignment.first(schoolclass_id: schoolclass.id).profile_id
-				Profilesubject.all(:profile_id => @profil_id, :subject_id => subject.id).each do |profile_subject|
-					@attribution_html = @attribution_html + profile_subject.hours.to_s
-				end
-			end
+			# @subject_teachers.each do |teacher|
+			# 	@attribution_html = @attribution_html + "<option value='"+ (teacher.teacher_id).to_s + "'>" + Teacher.first(id: teacher.teacher_id).shortcut + "</option>"
+			# end
+			# @attribution_html = @attribution_html + "</select>"
+			#Hinzufügen der Stündigkeit (dies hat auch ein bisschen Einfluss auf die Ladegeschwindigeit)
+			# if Profileassignment.first(schoolclass_id: schoolclass.id) != nil then
+			# 	@profil_id=Profileassignment.first(schoolclass_id: schoolclass.id).profile_id
+			# 	Profilesubject.all(:profile_id => @profil_id, :subject_id => subject.id).each do |profile_subject|
+			# 		@attribution_html = @attribution_html + profile_subject.hours.to_s
+			# 	end
+			# end
 			@attribution_html = @attribution_html + "</td>"
 		end
 		@attribution_html = @attribution_html + "</tr>"
