@@ -1,0 +1,76 @@
+Änderungen hochladen
+
+  * git status		# gucken, was geändert ist
+  * git diff		# genauer gucken, was geändert ist
+
+  * git add . <Alle Dateien werden hochgeladen>
+  * git commit -m "<Beschreibung der Änderungen>"
+
+  * git pull 		# aktuelle Version runterladen
+  * git push		# für alle sichtbar hochladen
+
+  Beispiel:
+  566  git init
+  567  git status
+  568  git remote add origin https://github.com/bclausen/lectures.git
+  569  git push -u origin master
+  570  git status
+  571  git add .
+  572  git status
+  573  git commit -am "Lectures erster Stand"
+  574  git push -u origin master
+  575  git pull
+  576  git commit -am "Ulf rueckgaengig"
+  577  git push
+  578  git remote add --track master ukiesbye https://github.com/fuesikpauker/lectures
+  579  git pull ukiesbye master
+  580  git pull ukiesbye
+  581  git pull
+  582  git pull ukiesbye
+  583  git pull ukiesbye master
+  584  history
+  585  history > history.txt
+  586  git push
+  587  git pull ukiesbye master
+  588  git status
+  589  git push
+  590  git pull ukiesbye master
+  591  ls
+  592  mc
+  593  git commit -am "Mit DB"
+  594  git push
+  595  git add .
+  596  git commit -am "Mit DB II"
+  597  git push
+  598  git push ukiesbye master
+  599  git pull ukiesbye master
+  600  bundle exec rake db:migrate
+  601  git add .
+  602  git push
+  603  git commit -am "Änderung_3"
+  604  git push
+  605  git pull ukiesbye master
+  606  git add .
+  607  git commit -am "Änderung_5"
+  608  git push
+  609  git pull ukiesbye master
+  610  git push
+  611  bundle exec rake db:migrate
+  612  bundle exec rake db:rollback
+  613  bundle exec rake db:migrate
+  614  bundle exec rake db:rollback
+  615  bundle exec rake db:migrate
+  616  bundle exec rake db:rollback
+  617  bundle exec rake db:migrate
+  618  git add .
+  619  git commit -am "Änderung_6"
+  620  git push
+  621  git pull ukiesbye master
+  622  git push
+  623  git add .
+  624  git commit -am "Änderung_9"
+  625  git push
+  626  git add .
+  627  git commit -am "Änderung_10"
+  628  git push
+  629  history > history2.txt
