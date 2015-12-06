@@ -1,5 +1,5 @@
 require "sinatra"
-require 'sinatra/reloader' if development?
+#require 'sinatra/reloader' if development?
 
 require './classes/attributions'
 require './classes/compensations'
@@ -20,18 +20,10 @@ require 'dm-migrations'
 DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/uvert.db")
 DataMapper.finalize
 
-before do
-    ####DIESER TEIL IST NOTWENDIG FÜR DIE DARSTELLUNG DER VERTEILUNG
-    @subjects = Subject.all
-	@options=[]	
-		@subjects.each do |subject|
-			@options[subject.id]=get_subject_teacher_options(subject.id)
-		end
-	####DIE AUSLAGERUNG BRINGT AUF MEINEM ALTEN THINKPAD 0,2 SEKUNDEN
-end
-
 
 get "/" do
+	#prepare_attrib_table
+	@@attrib_table=prepare_attrib_table
 	erb:home
 end
 
@@ -46,9 +38,10 @@ get "/teacher/:id" do
 end
 
 get "/attributions" do
-	@attributions = Attribution.all
+	#@attributions = Attribution.all
 	@anfang = Time.now
-
+	@schoolclasses = Schoolclass.all
+	#prepare_attrib_table
 	erb:attributions
 end
 
@@ -114,4 +107,35 @@ def get_subject_teacher_options(id)
 	 	end
 	end
 	return @subjectTeacherShortcut
+end
+
+def prepare_attrib_table
+	####DIESER TEIL IST NOTWENDIG FÜR DIE DARSTELLUNG DER VERTEILUNG
+    @subjects = Subject.all
+	@options=[]	
+		@subjects.each do |subject|
+			@options[subject.id]=get_subject_teacher_options(subject.id)
+		end
+	####DIE OBIGE AUSLAGERUNG BRINGT AUF MEINEM ALTEN THINKPAD 0,2 SEKUNDEN
+	@attrib_table=[]
+	@schoolclasses = Schoolclass.all
+	@subjects = Subject.all
+			@subjects.each do |subject|
+				zeile = "<tr> <td>" + subject.name + "</td>"
+				@subject_teachers=Department.all(:subject_id => subject.id)
+				@schoolclasses.each do |schoolclass|
+					zeile = zeile + "<td>"
+					if Profileassignment.first(schoolclass_id: schoolclass.id) != nil then 
+						@profil_id=Profileassignment.first(schoolclass_id: schoolclass.id).profile_id 
+						profilsub = Profilesubject.first(:profile_id => @profil_id, :subject_id => subject.id)
+						if profilsub != nil then
+							zeile= zeile + "<select name=" + schoolclass.id.to_s + "_" + subject.id.to_s + ">" +	@options[subject.id] + "</select>" + profilsub.hours.to_s 
+						end
+					end
+					zeile = zeile + "</td> "
+				end
+				zeile = zeile + "</tr> "
+				@attrib_table.push(zeile)
+			end
+	return @attrib_table
 end

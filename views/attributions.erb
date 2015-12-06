@@ -2,40 +2,16 @@
 	<form>
 		<table id="attribution">
 			<th>Fach</th>
-			<% @schoolclasses = Schoolclass.all %>
 			<% @schoolclasses.each do |schoolclass| %>
 				<th>
 					<%= schoolclass.name %>
 				</th> 
 			<% end %>
-
-			<% @subjects = Subject.all %>
-			<% @subjects.each do |subject| %>
-				<tr>
-					<td> 	
-						<%=  subject.name %>
-					</td>
-					<% @subject_teachers=Department.all(:subject_id => subject.id)%>
-					
-					<% @schoolclasses.each do |schoolclass| %>
-						<td>
-							<% if Profileassignment.first(schoolclass_id: schoolclass.id) != nil then %>
-								<% @profil_id=Profileassignment.first(schoolclass_id: schoolclass.id).profile_id %>
-								<% profilsub = Profilesubject.first(:profile_id => @profil_id, :subject_id => subject.id)%>
-								<% if profilsub != nil then%>
-									<select name="<%=(schoolclass.id).to_s+'_'+(subject.id).to_s%>">
-										<%= @options[subject.id] %>
-									</select>
-
-									<%= profilsub.hours %>
-								<%end%>
-							<% end %>
-						</td> 
-					<% end %>
-				</tr>
-
+			<% for i in 0..((@@attrib_table.size)-1) do %>
+				<%= @@attrib_table[i].to_s %>
 			<% end %>
 		</table>
 		<input type="submit">
 		<%= "Ladezeit: " + (Time.now - @anfang).to_s + " Sekunden "%>
+
 	</form>
