@@ -20,6 +20,17 @@ require 'dm-migrations'
 DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/uvert.db")
 DataMapper.finalize
 
+before do
+    ####DIESER TEIL IST NOTWENDIG FÜR DIE DARSTELLUNG DER VERTEILUNG
+    @subjects = Subject.all
+	@options=[]	
+		@subjects.each do |subject|
+			@options[subject.id]=get_subject_teacher_options(subject.id)
+		end
+	####DIE AUSLAGERUNG BRINGT AUF MEINEM ALTEN THINKPAD 0,2 SEKUNDEN
+end
+
+
 get "/" do
 	erb:home
 end
@@ -36,11 +47,8 @@ end
 
 get "/attributions" do
 	@attributions = Attribution.all
-	@subjects = Subject.all
-	@options=[]	
-		@subjects.each do |subject|
-			@options[subject.id]=get_subject_teacher_options(subject.id)
-		end
+	@anfang = Time.now
+
 	erb:attributions
 end
 
