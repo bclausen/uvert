@@ -3,13 +3,26 @@
 	<head>
 		<title>uvert</title>
 		<link rel="stylesheet" href="/css/styles.css">
+		<script src="/jquery/jquery.min.js"></script>
+	 	<script src="/jquery/jquery.cookie.js"></script>
+	 	<script src="/jquery/funktionen.js"></script>
 	</head>
 	<body>
 	<!-- ANFANG Kopfbereich mit TERMWAHL und MENÜ ANFANG -->
 			
 			<table id="kopfbereich">
 				<div id="termwahl">
-				<%=Term.first(is_active: true).name%>
+				<% @terms=Term.all %>
+				<% @term_choice="" %>
+				<% @terms.each do |term| %>
+					<% @term_choice = @term_choice + "<option value=' " + (term.id).to_s +  "'" + if term.id==Term.first(is_active: true).id then "selected" else "" end + ">" + term.name.to_s + "</option>" %>
+	 			<% end %>
+	 			<form>
+ 					<select>
+ 						<%= @term_choice %>
+ 					</select>
+	 			</form>
+				
 				</div>
 				<!--Eine Auswahl an Menüitems mit Pfadangabe, das kann sicher globaler oder eleganter gelöst werden -->
 				<% @menuitems={"Verteilung"=> "/attributions", "Lehrkräfte"=> "/teachers", "Fächer"=> "/subjects", "Klassen"=> "/schoolclasses"}%>
@@ -17,7 +30,7 @@
 					<td> 	
 						<ul id="Navigation">
 							<% @menuitems.each do |key,val| %>
-							<%= "<li><a href="+ val +">"+ key.to_s + "</a></li>" %>
+							<%= "<li class='" + is_active?(val.to_s) + "'><a href="+ val +">"+ key.to_s + "</a></li>" %>
 							<% end %>
 						</ul>
 					</td>
@@ -25,12 +38,141 @@
 			</table>
 
 			<ul id="Navigation2">
-				<li>Nav21</li>
-				<li>Nav22</li>
-				<li>Nav23</li>	
+				<% @teacher_items={"Lehrkräfte"=> "/teachers", "Verpflichtungen"=> "/workloads", "Ermäßigungen"=> "/compensations"}%>
+				<% @teacher_items.each do |key,val| %>
+					<% if request.path_info.include? val.to_s%>
+						<% @teacher_items.each do |key,val| %>
+							<%= "<li class=" + is_active?(val.to_s)+"><a href="+ val +">"+ key.to_s + "</a></li>" %>
+						<% end %>
+					<%end%>	
+				<%end%>
+				<% @schoolclass_items={"Klassen"=> "/schoolclasses", "Verpflichtungen"=> "/workloads", "Ermäßigungen"=> "/compensations"}%>
+				<% @schoolclass_items.each do |key,val| %>
+					<% if request.path_info.include? val.to_s%>
+						<% @schoolclass_items.each do |key,val| %>
+							<%= "<li class=" + is_active?(val.to_s)+"><a href="+ val +">"+ key.to_s + "</a></li>" %>
+						<% end %>
+					<%end%>	
+				<%end%>	
+				<% @subject_items={"Fächer"=> "/subjects", "Verpflichtungen"=> "/workloads", "Ermäßigungen"=> "/compensations"}%>
+				<% @subject_items.each do |key,val| %>
+					<% if request.path_info.include? val.to_s%>
+						<% @subject_items.each do |key,val| %>
+							<%= "<li class=" + is_active?(val.to_s)+"><a href="+ val +">"+ key.to_s + "</a></li>" %>
+						<% end %>
+					<%end%>	
+				<%end%>	
+				<% @attribution_items={"Verteilung"=> "/attributions", "Profile"=> "/profiles"}%>
+				<% @attribution_items.each do |key,val| %>
+					<% if request.path_info.include? val.to_s%>
+						<% @attribution_items.each do |key,val| %>
+							<%= "<li class=" + is_active?(val.to_s)+"><a href="+ val +">"+ key.to_s + "</a></li>" %>
+						<% end %>
+					<%end%>	
+				<%end%>		
 			</ul>		
 
 	<!-- ENDE Kopfbereich mit TERMWAHL und MENÜ ENDE -->
+
+<!-- ANFANG Seitenmenü mit dynamischen Inhalten ANFANG -->
+		<img id="dreieck1" class"dreieck" src="./pics/dreieck.gif" height="15"/>
+		<div id="boxcontainer" class="links">
+			<div id="info1" class="info">
+				<%=if request.path_info.include? "teachers" then "Lehrkräfte"
+				elsif request.path_info.include? "attributions" then "Verteilung"
+				elsif request.path_info.include? "subjects" then "Fächer"
+				elsif request.path_info.include? "schoolclasses" then "Klassen"
+				else "Wähle Bereich"
+				end %>
+			</div>
+			<div id="info2" class="info">
+				Hier steht was anderes
+			</div>
+			<div id="info3" class="info">
+				Kontakt und ganz viele weitere Sachen lorum ipsum Besenstil.....................
+			</div>
+		</div>
+<!-- ENDE Seitenmenü mit dynamischen Inhalten ENDE -->
+<!-- ANFANG Cookie-Speicherung des Menüzustands ANFANG -->
+		<script type="text/javascript">
+
+		function where(){
+			
+			if (<%=request.path_info.include? "teachers"%>) {
+			var active='teachers';
+			} else if (<%=request.path_info.include? "subjects"%>) {
+			var active='subjects';
+			} else if (<%=request.path_info.include? "departments"%>) {
+			var active='departments';
+			} else if (<%=request.path_info.include? "schoolclasses"%>) {
+			var active='schoolclasses';
+			} else if (<%=request.path_info.include? "terms"%>) {
+			var active='terms';
+			} else if (<%=request.path_info.include? "grades"%>) {
+			var active='grades';
+			} else if (<%=request.path_info.include? "compensations"%>) {
+			var active='compensations';
+			} else if (<%=request.path_info.include? "electives"%>) {
+			var active='electives';
+			} else if (<%=request.path_info.include? "courses"%>) {
+			var active='courses';
+			} else {
+			var active='nowhere';
+			}
+			
+			
+		return active;
+		}
+
+		$(document).ready(function(){
+			
+			$a=where();
+			$infocookie='infobox'+$a;
+			switch($.cookie('infosmall')) {
+			case '1':
+				$('#main').removeClass('content');
+				$('#main').addClass('contentbig');
+				$('#dreieck1').removeClass('dreieck');
+				$('#dreieck1').addClass('dreieckrotate');
+				$('#boxcontainer').slideUp(1);
+				break;
+			default:
+				$('#main').addClass('content');
+				$('#main').removeClass('contentbig');
+				$('#dreieck1').addClass('dreieck');
+				$('#dreieck1').removeClass('dreieckrotate');
+				$.cookie('infosmall', 0, { expires: 7, path: '/' });
+				$('#boxcontainer').slideDown(1);
+			} 
+			
+			infolayout($.cookie($infocookie));
+			
+		});
+
+		$("#dreieck1").click(function(){
+			$.cookie('infosmall', 1-$.cookie('infosmall'), { expires: 7, path: '/' });
+			$('#main').toggleClass( 'content', $.cookie('infosmall')==0 );
+			$('#main').toggleClass( 'contentbig', $.cookie('infosmall')==1 );
+			$('#dreieck1').toggleClass( 'dreieck', $.cookie('infosmall')==0 );
+			$('#dreieck1').toggleClass( 'dreieckrotate', $.cookie('infosmall')==1 );
+			$('#boxcontainer').slideToggle(1);
+		});
+
+		$('#info1').hover(function(){
+		   $.cookie($infocookie, 1, { expires: 7, path: '/' });
+		   infolayout($.cookie($infocookie));
+		});
+		$('#info2').hover(function(){
+		   $.cookie($infocookie, 2, { expires: 7, path: '/' });
+		   infolayout($.cookie($infocookie));
+		});
+		$('#info3').hover(function(){
+		   $.cookie($infocookie, 3, { expires: 7, path: '/' });
+		   infolayout($.cookie($infocookie));
+		});
+
+		</script>
+<!-- ENDE Cookie-Speicherung des Menüzustands ENDE -->
 
 	<%= yield %>
 	</body>

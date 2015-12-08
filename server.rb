@@ -109,6 +109,14 @@ def get_subject_teacher_options(id)
 	return @subjectTeacherShortcut
 end
 
+def is_active?(link_path)
+	if request.path_info.include? link_path.to_s then
+		return "active" 
+	else 
+		return ""
+ 	end
+end
+
 def prepare_attrib_table
 	####DIESER TEIL IST NOTWENDIG FÜR DIE DARSTELLUNG DER VERTEILUNG
     @subjects = Subject.all
