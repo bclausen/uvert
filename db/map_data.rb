@@ -17,6 +17,7 @@ require '../classes/teachers'
 require '../classes/terms'
 require '../classes/workloads'
 
+Attribution.auto_migrate!
 Compensation.auto_migrate!
 Department.auto_migrate!
 Grade.auto_migrate!

@@ -12,14 +12,14 @@ class Teacher
 	property :lastname, String
 	property :firstname, String
 	property :shortcut, String
-
+	#Teste git-Push
 	has n, :workloads
 	has n, :departments
 	has n, :subjects, :through => :departments
 	has n, :teacherActives
 	has n, :terms, :through => :teacherActives
 	has n, :attributions
-	has n, :subjects, :through => :attributions
+	#has n, :subjects, :through => :attributions
 	has n, :profileassignments, :through => :attributions
 end
 

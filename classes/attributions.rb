@@ -10,7 +10,6 @@ class Attribution
 	include DataMapper::Resource
 	property :id, Serial
 	
-
 	belongs_to :teacher
 	belongs_to :subject
 	belongs_to :profileassignment
