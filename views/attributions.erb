@@ -1,5 +1,6 @@
 <p>Stundentafel:</p>
-	<form>
+	<form action="/attribution" method="post">
+	<input type="hidden" name="_method" value="put">
 		<table id="attribution">
 			<th>Fach</th>
 			<% @schoolclasses.each do |schoolclass| %>

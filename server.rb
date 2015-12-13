@@ -45,46 +45,24 @@ get "/attributions" do
 	erb:attributions
 end
 
-get "/attributions2" do
-	# @subject_array =[]
-	# @subjects = Subject.all
-	# @subjects.each do |subject|
-	# 	@subject_array.push(subject.name)
-	# 	@subject_array.push(subject.id) 
-	# end
-	#2. Idee: Schon fertigen HTML-Code generieren
-	@attribution_html ="<table> "
-	@schoolclasses = Schoolclass.all
-	#Hinzufürgen der Klassennamen als Überschrift
-	@schoolclasses.each do |schoolclass|
-		@attribution_html = @attribution_html + " <th> " + schoolclass.name + "</th>"
-	end
-	#Hinzufügen der Fächer
-	@subjects = Subject.all
-	@subjects.each do |subject|
-		@attribution_html = @attribution_html + "<tr> <td>" + subject.name + "<td>"
-		@schoolclasses.each do |schoolclass|
-			@subject_teachers=Department.all(:subject_id => subject.id)
-			@attribution_html = @attribution_html + "<td> <select name='" + (schoolclass.id).to_s + "_" +(subject.id).to_s + "' >"
-			#Ab hier verzögert sich das laden der Seite
-			# @subject_teachers.each do |teacher|
-			# 	@attribution_html = @attribution_html + "<option value='"+ (teacher.teacher_id).to_s + "'>" + Teacher.first(id: teacher.teacher_id).shortcut + "</option>"
-			# end
-			# @attribution_html = @attribution_html + "</select>"
-			#Hinzufügen der Stündigkeit (dies hat auch ein bisschen Einfluss auf die Ladegeschwindigeit)
-			# if Profileassignment.first(schoolclass_id: schoolclass.id) != nil then
-			# 	@profil_id=Profileassignment.first(schoolclass_id: schoolclass.id).profile_id
-			# 	Profilesubject.all(:profile_id => @profil_id, :subject_id => subject.id).each do |profile_subject|
-			# 		@attribution_html = @attribution_html + profile_subject.hours.to_s
-			# 	end
-			# end
-			@attribution_html = @attribution_html + "</td>"
+put "/attribution" do
+	params.each do |entry|
+	  @seperated = entry[0].partition('_')
+	  @profileassignment_id = @seperated[0].to_s
+	  @subject_id = @seperated[2].to_s
+	  @teacher_id = entry[1].to_s
+	  if @teacher_id != "" then
+	  	
+	  	attr = Attribution.first(:subject_id => @subject_id, :profileassignment_id => @profileassignment_id)
+		if attr.nil?
+			attr = Attribution.create(:subject_id => @subject_id, :profileassignment_id => @profileassignment_id, :teacher_id => @teacher_id)
+		else
+			attr = Attribution.update(:teacher_id => @teacher_id)
 		end
-		@attribution_html = @attribution_html + "</tr>"
+				  	
+	  end	  	
 	end
-
-	@attribution_html = @attribution_html + " </table>"
-	erb:attributions2
+	redirect ("/")
 end
 
 get "/subjects" do
@@ -95,19 +73,6 @@ end
 get "/schoolclasses" do
 	erb:schoolclasses
 end
-
-# ALT - wegen get_schoolclass_teacher_options(subject_id,schooclass_id) überflüssig
-# def get_subject_teacher_options(id)
-# 	@subjects = Subject.all(:id => id)
-# 	@subjectTeacherShortcut=""
-# 	@subjects.each do |subject|
-# 	 	@subject_teachers=Department.all(:subject_id => subject.id)
-# 	 	@subject_teachers.each do |teacher|
-# 	 		@subjectTeacherShortcut = @subjectTeacherShortcut + "<option value=" + (teacher.teacher_id).to_s+ ">" + Teacher.first(id: teacher.teacher_id).shortcut.to_s + "</option>"
-# 	 	end
-# 	end
-# 	return @subjectTeacherShortcut
-# end
 
 def get_schoolclass_teacher_options(subject_id, schoolclass_id)
 	@subjects = Subject.first(:id => subject_id)
@@ -137,13 +102,6 @@ def is_active?(link_path)
 end
 
 def prepare_attrib_table
-	####DIESER TEIL IST NOTWENDIG FÜR DIE DARSTELLUNG DER VERTEILUNG
-    #@subjects = Subject.all
-	#@options=[]	
-	#	@subjects.each do |subject|
-	#		@options[subject.id]=get_schoolclass_teacher_options(subject.id)
-	#	end
-	####DIE OBIGE AUSLAGERUNG BRINGT AUF MEINEM ALTEN THINKPAD 0,2 SEKUNDEN
 	@options=[]
 	@attrib_table=[]
 	@schoolclasses = Schoolclass.all
@@ -155,11 +113,12 @@ def prepare_attrib_table
 					
 					zeile = zeile + "<td>"
 					if Profileassignment.first(schoolclass_id: schoolclass.id) != nil then 
+						@profileassignment_id = Profileassignment.first(schoolclass_id: schoolclass.id).id
 						@options[subject.id]=get_schoolclass_teacher_options(subject.id,schoolclass.id)
 						@profil_id=Profileassignment.first(schoolclass_id: schoolclass.id).profile_id 
 						profilsub = Profilesubject.first(:profile_id => @profil_id, :subject_id => subject.id)
 						if profilsub != nil then
-							zeile= zeile + "<select name=" + schoolclass.id.to_s + "_" + subject.id.to_s + ">" +	@options[subject.id] + "</select>" + profilsub.hours.to_s 
+							zeile= zeile + "<select name=" + @profileassignment_id.to_s + "_" + subject.id.to_s + ">" +	@options[subject.id] + "</select>" + profilsub.hours.to_s 
 						end
 					end
 					zeile = zeile + "</td> "
