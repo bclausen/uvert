@@ -96,16 +96,35 @@ get "/schoolclasses" do
 	erb:schoolclasses
 end
 
+# ALT - wegen get_schoolclass_teacher_options(subject_id,schooclass_id) überflüssig
+# def get_subject_teacher_options(id)
+# 	@subjects = Subject.all(:id => id)
+# 	@subjectTeacherShortcut=""
+# 	@subjects.each do |subject|
+# 	 	@subject_teachers=Department.all(:subject_id => subject.id)
+# 	 	@subject_teachers.each do |teacher|
+# 	 		@subjectTeacherShortcut = @subjectTeacherShortcut + "<option value=" + (teacher.teacher_id).to_s+ ">" + Teacher.first(id: teacher.teacher_id).shortcut.to_s + "</option>"
+# 	 	end
+# 	end
+# 	return @subjectTeacherShortcut
+# end
 
-def get_subject_teacher_options(id)
-	@subjects = Subject.all(:id => id)
-	@subjectTeacherShortcut=""
-	@subjects.each do |subject|
-	 	@subject_teachers=Department.all(:subject_id => subject.id)
-	 	@subject_teachers.each do |teacher|
-	 		@subjectTeacherShortcut = @subjectTeacherShortcut + "<option value=" + (teacher.teacher_id).to_s+ ">" + Teacher.first(id: teacher.teacher_id).shortcut.to_s + "</option>"
-	 	end
+def get_schoolclass_teacher_options(subject_id, schoolclass_id)
+	@subjects = Subject.first(:id => subject_id)
+	@subjectTeacherShortcut="<option value=''>n.a.</option>"
+	if Attribution.first(:subject_id => subject_id, :profileassignment_id => Profileassignment.first(:schoolclass_id=>schoolclass_id).id) != nil then	
+		@assigned_teacher_id=Attribution.first(:subject_id => subject_id, :profileassignment_id => Profileassignment.first(:schoolclass_id=>schoolclass_id).id).teacher_id
+	else
+		@assigned_teacher_id=nil
 	end
+ 	@subject_teachers=Department.all(:subject_id => @subjects["id"])
+ 	@subject_teachers.each do |teacher|
+ 		if @assigned_teacher_id==nil or @assigned_teacher_id!=teacher.teacher_id then
+ 			@subjectTeacherShortcut = @subjectTeacherShortcut + "<option value=" + (teacher.teacher_id).to_s+ ">" + Teacher.first(id: teacher.teacher_id).shortcut.to_s + "</option>"
+ 		else
+ 			@subjectTeacherShortcut = @subjectTeacherShortcut + "<option value=" + (teacher.teacher_id).to_s+ " selected>" + Teacher.first(id: teacher.teacher_id).shortcut.to_s + "</option>"
+ 		end
+ 	end
 	return @subjectTeacherShortcut
 end
 
@@ -119,12 +138,13 @@ end
 
 def prepare_attrib_table
 	####DIESER TEIL IST NOTWENDIG FÜR DIE DARSTELLUNG DER VERTEILUNG
-    @subjects = Subject.all
-	@options=[]	
-		@subjects.each do |subject|
-			@options[subject.id]=get_subject_teacher_options(subject.id)
-		end
+    #@subjects = Subject.all
+	#@options=[]	
+	#	@subjects.each do |subject|
+	#		@options[subject.id]=get_schoolclass_teacher_options(subject.id)
+	#	end
 	####DIE OBIGE AUSLAGERUNG BRINGT AUF MEINEM ALTEN THINKPAD 0,2 SEKUNDEN
+	@options=[]
 	@attrib_table=[]
 	@schoolclasses = Schoolclass.all
 	@subjects = Subject.all
@@ -132,8 +152,10 @@ def prepare_attrib_table
 				zeile = "<tr> <td>" + subject.name + "</td>"
 				@subject_teachers=Department.all(:subject_id => subject.id)
 				@schoolclasses.each do |schoolclass|
+					
 					zeile = zeile + "<td>"
 					if Profileassignment.first(schoolclass_id: schoolclass.id) != nil then 
+						@options[subject.id]=get_schoolclass_teacher_options(subject.id,schoolclass.id)
 						@profil_id=Profileassignment.first(schoolclass_id: schoolclass.id).profile_id 
 						profilsub = Profilesubject.first(:profile_id => @profil_id, :subject_id => subject.id)
 						if profilsub != nil then
