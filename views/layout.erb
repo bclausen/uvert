@@ -46,7 +46,7 @@
 						<% end %>
 					<%end%>	
 				<%end%>
-				<% @schoolclass_items={"Klassen"=> "/schoolclasses", "Verpflichtungen"=> "/workloads", "Ermäßigungen"=> "/compensations"}%>
+				<% @schoolclass_items={"Klassen"=> "/schoolclasses", "Profile"=> "/profiles", "Ermäßigungen"=> "/compensations"}%>
 				<% @schoolclass_items.each do |key,val| %>
 					<% if request.path_info.include? val.to_s%>
 						<% @schoolclass_items.each do |key,val| %>

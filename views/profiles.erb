@@ -1,0 +1,25 @@
+<p>Profile:</p>
+<p><%= @profiles %></p>
+<table>
+	<!-- Die Termspalte ist nur für die Entwicklung notwendig -->
+	<!-- Essollen nur die zum aktuellen Term gehörigen angezeigt werden -->
+	<th>Bezeichnung</th> <th>Term</th><th>Zugewiesene Klassen</th>
+	<% @profiles.each do |profile| %>
+		<tr>
+			<td><a href="/profile/<%=profile.id%>/edit"><%=  profile.name %></a></td>
+			<td><%= Term.first(:id.like => profile.term_id).name %></td>
+			<td>
+				<% profileassignments = Profileassignment.all(:profile_id.like => profile.id) %>
+				<% number_of_classes = profileassignments.size %>
+				<% class_counter = 1 %>
+				<% profileassignments.each do |assignment| %>
+					<%= Schoolclass.first(:id.like => assignment.profile_id).name %>
+					<% if number_of_classes > class_counter then %>
+						<%= ", " %>
+					<% end %>
+					<% class_counter= class_counter + 1 %>
+				<% end %>
+			</td>
+		</tr>
+	<% end %>
+</table>
