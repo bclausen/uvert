@@ -22,7 +22,6 @@ DataMapper.finalize
 
 
 get "/" do
-	#prepare_attrib_table
 	@@attrib_table=prepare_attrib_table
 	erb:home
 end
@@ -38,10 +37,7 @@ get "/teacher/:id" do
 end
 
 get "/attributions" do
-	#@attributions = Attribution.all
-	@anfang = Time.now
 	@schoolclasses = Schoolclass.all
-	#prepare_attrib_table
 	erb:attributions
 end
 
@@ -51,14 +47,21 @@ put "/attribution" do
 	  @profileassignment_id = @seperated[0].to_s
 	  @subject_id = @seperated[2].to_s
 	  @teacher_id = entry[1].to_s
+	  
+	  attr = Attribution.first(:subject_id => @subject_id, :profileassignment_id => @profileassignment_id)
 	  if @teacher_id != "" then
 	  	
-	  	attr = Attribution.first(:subject_id => @subject_id, :profileassignment_id => @profileassignment_id)
-		if attr.nil?
-			attr = Attribution.create(:subject_id => @subject_id, :profileassignment_id => @profileassignment_id, :teacher_id => @teacher_id)
+		  	if attr.nil?
+				attr = Attribution.create(:subject_id => @subject_id, :profileassignment_id => @profileassignment_id, :teacher_id => @teacher_id)
+			else
+				attr.update(:teacher_id => @teacher_id)
+			end
+
 		else
-			attr = Attribution.update(:teacher_id => @teacher_id)
-		end
+
+			if not attr.nil?
+				attr.destroy
+			end
 				  	
 	  end	  	
 	end

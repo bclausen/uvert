@@ -1,18 +1,16 @@
 <p>Stundentafel:</p>
 	<form action="/attribution" method="post">
-	<input type="hidden" name="_method" value="put">
-		<table id="attribution">
-			<th>Fach</th>
-			<% @schoolclasses.each do |schoolclass| %>
-				<th>
-					<%= schoolclass.name %>
-				</th> 
-			<% end %>
-			<% for i in 0..((@@attrib_table.size)-1) do %>
-				<%= @@attrib_table[i].to_s %>
-			<% end %>
-		</table>
+		<input type="hidden" name="_method" value="put">
+			<table id="attribution">
+				<th>Fach</th>
+				<% @schoolclasses.each do |schoolclass| %>
+					<th>
+						<%= schoolclass.name %>
+					</th> 
+				<% end %>
+				<% for i in 0..((@@attrib_table.size)-1) do %>
+					<%= @@attrib_table[i].to_s %>
+				<% end %>
+			</table>
 		<input type="submit">
-		<%= "Ladezeit: " + (Time.now - @anfang).to_s + " Sekunden "%>
-
 	</form>
