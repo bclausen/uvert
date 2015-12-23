@@ -77,6 +77,18 @@ get "/schoolclasses" do
 	erb:schoolclasses
 end
 
+get "/profiles" do
+	@profiles = Profile.all
+	erb:profiles
+end
+
+get "/profile/:id/edit" do
+	@profile = Profile.get(params[:id])
+	@subjects = Subject.all
+	@schoolclasses = Schoolclass.all
+	erb:profile_edit
+end
+
 def get_schoolclass_teacher_options(subject_id, schoolclass_id)
 	@subjects = Subject.first(:id => subject_id)
 	@subjectTeacherShortcut="<option value=''>n.a.</option>"

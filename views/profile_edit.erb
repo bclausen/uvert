@@ -1,0 +1,58 @@
+<h1> <%= @profile.name %> </h1>
+<% profilesubjects = Profilesubject.all(:profile_id.like => @profile.id) %>
+<form action="/profile/<%= @profile.id.to_s %>" method="post" >
+	<p>Bezeichnung: <input type="text" name="name" value="<%= @profile.name %>"></p>
+	<p>Term: <%= Term.first(:id.like => @profile.term_id).name %></p>
+	<p>Geben Sie eine Stundenzahl ein, wenn das Fach dem Profil zugeordnet werden soll.</p>
+
+	<p>Einträge mit Null Stunden werden dem Profil nicht zugeordnet. </p>
+	
+	<table>
+		<tr>
+			<td>
+				Fächer: </br>
+				<% @subjects.each do |subject| %>
+					<!-- Lade eventuell vorhandene Fach-Stunden-Zuweisung  -->
+					<% profile_subject = Profilesubject.first(:profile_id =>@profile.id, :subject_id => subject.id) %>
+					<!-- Färbe grau, wenn Fach nicht im Profil -->
+					<% if profile_subject.nil? then %>
+						<font color="#CCCCCC">
+							<%= subject.name %>
+						</font>
+					<% else %>
+                		<%= subject.name %>
+            		<% end %>
+            		<% if profile_subject.nil? then %>
+                		<% hours = '0' %>
+            		<% else %>
+                		<% hours = profile_subject.hours %>
+            		<% end %>
+            		<input type="text" name="<%= hours %>" value = <%= hours %>>
+					</br>
+				<% end %>
+			</td>
+			<td style="vertical-align:top">
+				Klassen:
+				<p>Geben Sie an, für welche Klassen dieses Profil gültig ist.</p>
+				<% @schoolclasses.each do |schoolclass| %>
+					<!-- Lade schon eingetragene Klassen  -->
+					<% profileassignments = Profileassignment.first(:profile_id.like => @profile.id, :schoolclass_id => schoolclass.id) %>
+					<% if profileassignments.nil? then %>
+                		<font color="#CCCCCC">
+                  			<%= schoolclass.name %>
+                		</font>
+            		<% else %>
+                			<%= schoolclass.name %>
+            		<% end %>
+            		</br>
+				<% end %>
+				<p></p>
+				<input type="hidden" name="_method" value="put">
+	  			<input type="submit" value="Profil ändern">
+			</td>
+		</tr>
+		
+	</table>
+
+	
+</form>
