@@ -124,6 +124,21 @@
 		return active;
 		}
 
+		function getval(sel) {
+       		$teacher_id=sel.value;
+       		$attrib=sel.name.split("_");
+       		$profileassignment_id=$attrib[0];
+       		$subject_id=$attrib[1];
+       		
+
+       		$.ajax({
+  				method: "POST",
+  				url: "/attribution",
+  				data: { profileassignment_id: $profileassignment_id, subject_id: $subject_id, teacher_id: $teacher_id }
+			})
+  			
+    	}
+
 		$(document).ready(function(){
 			
 			$a=where();

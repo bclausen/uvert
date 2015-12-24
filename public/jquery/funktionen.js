@@ -20,3 +20,7 @@ function infolayout (i){
 		$('#info3').addClass('infohover');
 	} 
     } 
+
+function getval(sel) {
+       alert(sel.value);
+    }
