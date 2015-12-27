@@ -1,4 +1,5 @@
 <p>Stundentafel:</p>
+<%= "<!--" + @@attrib_table[0].to_s + "-->"%>
 	<form action="/attribution" method="post">
 		<input type="hidden" name="_method" value="put">
 			<table id="attribution">
@@ -12,7 +13,9 @@
 					<%= @@attrib_table[i].to_s %>
 				<% end %>
 			</table>
-		<input type="submit">
+		 <!-- <input type="submit">  -->
+
+		
 
 		
 	</form>

@@ -58,10 +58,11 @@ post "/attribution" do
 
 		if not attr.nil?
 			attr.destroy
+			alter_attrib_table(@profileassignment_id, @subject_id,'')
 		end
 				  	
 	end
-	redirect ("/")
+	alter_attrib_table(@profileassignment_id, @subject_id, @teacher_id)
 end
 
 put "/attribution" do
@@ -114,7 +115,7 @@ get "/profile/:id/edit" do
 	erb:profile_edit
 end
 
-helpers do
+
 	def get_schoolclass_teacher_options(subject_id, schoolclass_id)
 		@subjects = Subject.first(:id => subject_id)
 		@subjectTeacherShortcut="<option value=''>n.a.</option>"
@@ -169,4 +170,31 @@ helpers do
 				end
 		return @attrib_table
 	end
-end
+
+	def alter_attrib_table(profileassignment_id, subject_id, teacher_id)
+		i=0 
+		altered = false
+		while i < @@attrib_table.size and not altered do
+			#alter
+			index = @@attrib_table[i].index(' name='+profileassignment_id.to_s+'_'+subject_id.to_s + ' ')
+			#puts(index)
+			if  index != nil then
+				index_start= @@attrib_table[i].rindex('<select', index)
+				puts(index_start)
+				index_end= @@attrib_table[i].index('</select>', index)+8
+				puts(index_end)
+				without_selected=@@attrib_table[i][index_start..index_end].sub!('selected','')
+				puts(without_selected)
+				selected_teacher_index=without_selected.index('value='+teacher_id.to_s)
+				puts(selected_teacher_index)
+				puts(('value='+teacher_id.to_s).size)
+				with_selected_teacher=without_selected.insert(selected_teacher_index+('value='+teacher_id.to_s).size, ' selected')
+				puts(with_selected_teacher)
+				@@attrib_table[i].sub!(@@attrib_table[i][index_start..index_end], with_selected_teacher)
+				altered=true
+			end
+			i=i+1
+		end 
+
+		#Hier muss @@attrib_table durchsucht und verändert werden (selected)
+	end
