@@ -123,7 +123,11 @@ put '/profile/:id' do
   #Das Aktualisieren der profilassignments und der profilesubjects wird nicht
   #so einfach, da die datensätze nicht einfach geändert werden müssen, sondern
   #erst erzeugt bzw. gelöscht werden müssen
-  redirect ("/profiles")
+  parameter = params.select {|key, val| not val.empty?}.values
+  #parameter.to_s #Herüber erfolgt keine Ausgabe im Browser 
+   "Hallo" + params.to_s
+ # "Hallo" + params[0][0]
+  #redirect ("/profiles")
 end
 
 helpers do
