@@ -114,6 +114,18 @@ get "/profile/:id/edit" do
 	erb:profile_edit
 end
 
+put '/profile/:id' do
+  #Testausgabe der benannten Parameter
+  #params[:profile]# + params[:hours].to_s
+  profile = Profile.get(params[:id])
+  #Im folgenden wird das Profil aktualisiert (nur der Name)
+  profile.update(params[:profile])
+  #Das Aktualisieren der profilassignments und der profilesubjects wird nicht
+  #so einfach, da die datensätze nicht einfach geändert werden müssen, sondern
+  #erst erzeugt bzw. gelöscht werden müssen
+  redirect ("/profiles")
+end
+
 helpers do
 	def get_schoolclass_teacher_options(subject_id, schoolclass_id)
 		@subjects = Subject.first(:id => subject_id)
