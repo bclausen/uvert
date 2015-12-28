@@ -115,6 +115,23 @@ get "/profile/:id/edit" do
 	erb:profile_edit
 end
 
+put '/profile/:id' do
+  #Testausgabe der benannten Parameter
+  #params[:profile]# + params[:hours].to_s
+  profile = Profile.get(params[:id])
+  #Im folgenden wird das Profil aktualisiert (nur der Name)
+  profile.update(params[:profile])
+  #Das Aktualisieren der profilassignments und der profilesubjects wird nicht
+  #so einfach, da die datensätze nicht einfach geändert werden müssen, sondern
+  #erst erzeugt bzw. gelöscht werden müssen
+  parameter = params.select {|key, val| not val.empty?}.values
+  #parameter.to_s #Herüber erfolgt keine Ausgabe im Browser 
+   "Hallo" + params.to_s
+ # "Hallo" + params[0][0]
+  #redirect ("/profiles")
+end
+
+helpers do
 
 	def get_schoolclass_teacher_options(subject_id, schoolclass_id)
 		@subjects = Subject.first(:id => subject_id)
@@ -180,21 +197,22 @@ end
 			#puts(index)
 			if  index != nil then
 				index_start= @@attrib_table[i].rindex('<select', index)
-				puts(index_start)
+				#puts(index_start)
 				index_end= @@attrib_table[i].index('</select>', index)+8
-				puts(index_end)
+				#puts(index_end)
 				without_selected=@@attrib_table[i][index_start..index_end].sub!('selected','')
-				puts(without_selected)
+				#puts(without_selected)
 				selected_teacher_index=without_selected.index('value='+teacher_id.to_s)
-				puts(selected_teacher_index)
-				puts(('value='+teacher_id.to_s).size)
+				#puts(selected_teacher_index)
+				#puts(('value='+teacher_id.to_s).size)
 				with_selected_teacher=without_selected.insert(selected_teacher_index+('value='+teacher_id.to_s).size, ' selected')
-				puts(with_selected_teacher)
+				#puts(with_selected_teacher)
 				@@attrib_table[i].sub!(@@attrib_table[i][index_start..index_end], with_selected_teacher)
 				altered=true
 			end
 			i=i+1
 		end 
 
-		#Hier muss @@attrib_table durchsucht und verändert werden (selected)
+		
 	end
+end
