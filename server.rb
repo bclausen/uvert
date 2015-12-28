@@ -111,6 +111,49 @@ end
 get "/profile/:id/edit" do
 	@profile = Profile.get(params[:id])
 	@subjects = Subject.all
+	# Erzeuge HTML-Tabellenzellen für Fächer mit Stundenzahl des Profils
+	@subjects_hour_tabledata = []
+	@subjects.each do |subject|
+		profile_subject = Profilesubject.first(:profile_id =>@profile.id, :subject_id => subject.id)
+		if profile_subject.nil? then
+			tabledata = "<td><font color='#CCCCCC'>" + subject.name + "</font></td>"
+		else
+			tabledata = "<td>" + subject.name + "</td>"
+		end
+		tabledata = tabledata + "<td>"
+		name_subject_hour_field = subject.id.to_s + "_hours"
+		if profile_subject.nil? then
+			hours = '0'
+		else
+			hours = profile_subject.hours
+		end
+		tabledata = tabledata + "<input type='text' name=' " + name_subject_hour_field + "' value =" + hours.to_s + ">"
+		tabledata = tabledata + "</td>"
+		@subjects_hour_tabledata.push(tabledata)
+	end
+	###############################
+	# Erzeuge HTML-Tabellenzellen für die Zuordnung von Klassen geordnet nach Jahrgängen
+	@grades = Grade.all
+	@schoolclasses_tabledata = []
+	@grades.each do |grade|
+		tabledata = "<td>"
+		schoolclasses = Schoolclass.all(:grade_id => grade.id)
+		schoolclasses.each do |schoolclass|
+			profileassignment = Profileassignment.first(:profile_id.like => @profile.id, :schoolclass_id => schoolclass.id)
+			name_class_field = schoolclass.id
+			if profileassignment.nil? then
+				tabledata = tabledata + "<font color='#CCCCCC'>" + schoolclass.name + "</font>" + "&nbsp"
+				checked = ''
+			else
+				tabledata = tabledata +  schoolclass.name + "&nbsp"
+				checked = 'checked' 
+			end
+			tabledata = tabledata + "<input type='checkbox' name='" + name_class_field.to_s + "'" + checked + ">" + "&nbsp"
+		end
+		tabledata = tabledata + "</td>"
+		@schoolclasses_tabledata.push(tabledata)
+	end
+	###############################
 	@schoolclasses = Schoolclass.all
 	erb:profile_edit
 end

@@ -1,73 +1,27 @@
 <h1> <%= @profile.name %> </h1>
 <% profilesubjects = Profilesubject.all(:profile_id.like => @profile.id) %>
+<% #  %>
+<% # Die Einträge und ausgewählte Checkboxen werden wie folgt über params übertragen: %>
+<% #  %>
+<% #  %>
 
-<% #  %>
-<% # Die Einträge und ausgewählte Checkboxen %>
-<% #  %>
-<% #  %>
-<form action="/profile/<%= @profile.id.to_s %>" method="post" >
+<form action="/profile/<%= @profile.id.to_s %>" method="post">
 	<p>Bezeichnung: <input type="text" name="profile[name]" value="<%= @profile.name %>"></p>
-	<p>Term: <%= Term.first(:id.like => @profile.term_id).name %></p>
-	<p>Geben Sie eine Stundenzahl ein, wenn das Fach dem Profil zugeordnet werden soll.</p>
-
-	<p>Einträge mit Null Stunden werden dem Profil nicht zugeordnet. </p>
+	<input type="hidden" name="_method" value="put">
+	<table id="profile_subject_hours">
+		<th>Fach</th> 
+		<th>Stunden</th> 
+		<th>Klassen</th>
+			<% for i in 0..((@subjects_hour_tabledata.size)-1) do %>
+				<tr>
+				<%= @subjects_hour_tabledata[i].to_s %>
+				<% if @schoolclasses_tabledata[i] != nil then %>
+					<%= @schoolclasses_tabledata[i] %>
+				<% end %>
+				</tr>
+			<% end %>
+	<tr><td><input type="submit" value="Profil ändern"></td></tr>
 	
-	<table>
-		<tr>
-			<td style="vertical-align:top">
-				Fächer: </br>
-				<% @subjects.each do |subject| %>
-					<!-- Lade eventuell vorhandene Fach-Stunden-Zuweisung  -->
-					<% profile_subject = Profilesubject.first(:profile_id =>@profile.id, :subject_id => subject.id) %>
-					<!-- Färbe grau, wenn Fach nicht im Profil -->
-					<% if profile_subject.nil? then %>
-						<font color="#CCCCCC">
-							<%= subject.name %>
-						</font>
-					<% else %>
-                		<%= subject.name %>
-            		<% end %>
-					<!-- Jedes zum Profil gehörende Fach hat seine eigene Stundenzahl. Daher bekommt das Feld einen Namen, andem man das Fach erkennt. -->
-					<% name_subject_hour_field = "profile_subjects[#{subject.id}]" %>
-            		<% if profile_subject.nil? then %>
-                		<% hours = '0' %>
-            		<% else %>
-                		<% hours = profile_subject.hours %>
-            		<% end %>
-            		<input type="text" name="<%= name_subject_hour_field %>" value = <%= hours %>>
-					</br>
-				<% end %>
-			</td>
-			<td style="vertical-align:top">
-				Klassen:
-				<p>Geben Sie an, für welche Klassen dieses Profil gültig ist.</p>
-				<% @schoolclasses.each do |schoolclass| %>
-					<!-- Lade schon eingetragene Klassen  -->
-					<% profileassignments = Profileassignment.first(:profile_id.like => @profile.id, :schoolclass_id => schoolclass.id) %>
-					<% if profileassignments.nil? then %>
-                		<font color="#CCCCCC">
-                  			<%= schoolclass.name %>
-                		</font>
-            		<% else %>
-                			<%= schoolclass.name %>
-            		<% end %>
-
-            		<% name_class_field = "profileassignments[#{schoolclass.id}]" %>
-            		<% if profileassignments.nil? then %>
-                		<% checked = '' %>
-            		<% else %>
-                		<% checked = 'checked' %>
-            		<% end %>
-            		<input type="checkbox" name="<%= name_class_field %>" <%= checked %> >
-            		</br>
-				<% end %>
-				<p></p>
-				<input type="hidden" name="_method" value="put">
-	  			<input type="submit" value="Profil ändern">
-			</td>
-		</tr>
-		
 	</table>
-
 	
 </form>
