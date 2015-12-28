@@ -192,31 +192,21 @@ helpers do
 		i=0 
 		altered = false
 		while i < @@attrib_table.size and not altered do
-			#alter
 			index = @@attrib_table[i].index(' name='+profileassignment_id.to_s+'_'+subject_id.to_s + ' ')
-			#puts(index)
 			if  index != nil then
 				index_start= @@attrib_table[i].rindex('<select', index)
-				#puts(index_start)
 				index_end= @@attrib_table[i].index('</select>', index)+8
-				#puts(index_end)
 				if @@attrib_table[i][index_start..index_end].sub!('selected','') != nil then
 					without_selected=@@attrib_table[i][index_start..index_end].sub!('selected','')
 				else
 					without_selected=@@attrib_table[i][index_start..index_end]
 				end
-				puts(without_selected)
 				selected_teacher_index=without_selected.index('value='+teacher_id.to_s)
-				puts(selected_teacher_index)
-				puts(('value='+teacher_id.to_s).size)
 				with_selected_teacher=without_selected.insert(selected_teacher_index+('value='+teacher_id.to_s).size, ' selected')
-				puts(with_selected_teacher)
 				@@attrib_table[i].sub!(@@attrib_table[i][index_start..index_end], with_selected_teacher)
 				altered=true
 			end
 			i=i+1
 		end 
-
-		
 	end
 end
