@@ -150,10 +150,23 @@
   			
     	}
 
-    	<% #Folgende Funktion dient der Aktualisierung des Profils %>
-    	function getval_profil(sel) {
-    		alert(sel.value);
+    	<% #Folgende Funktion dient der Aktualisierung eines ausgwählten Profils %>
+
+    	function getval_profilname(sel) {
+    		$profile_id = sel.name;
+    		$profile_name = sel.value; 
+    		//Zum Testen
+    		//alert(sel.name + ": " + sel.value + "_" + $profile_id + "_" + $profile_name );
+    	
+    		$.ajax({
+  				method: "POST",
+  				url: "/profile/name/update",
+  				data: { profile_id: $profile_id, profile_name: $profile_name }
+  			})
+
     	}
+
+    	<% ####################################################### %>
 
 		$(document).ready(function(){
 			

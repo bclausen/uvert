@@ -108,6 +108,14 @@ get "/profiles" do
 	erb:profiles
 end
 
+post "/profile/name/update" do
+	@profile_id = params[:profile_id] 
+ 	@profile_name = params[:profile_name]  
+ 	profile = Profile.get(@profile_id)
+  	#Im folgenden wird das Profil aktualisiert (nur der Name)
+  	profile.update(:name => @profile_name)
+ end
+
 get "/profile/:id/edit" do
 	@profile = Profile.get(params[:id])
 	@subjects = Subject.all
