@@ -3,9 +3,19 @@
 	<head>
 		<title>uvert</title>
 		<link rel="stylesheet" href="/css/styles.css">
-		<script src="/jquery/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="/css/datatables.css">
+		<link rel="stylesheet" type="text/css" href="/css/buttons.dataTables.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/fixedColumns.dataTables.min.css">
+		<script src="/jquery/jquery-2.1.4.js"></script>
 	 	<script src="/jquery/jquery.cookie.js"></script>
 	 	<script src="/jquery/funktionen.js"></script>
+	 	<script type="text/javascript" charset="utf8" src="/jquery/datatables.js"></script>
+	 	<script type="text/javascript" charset="utf8" src="/jquery/dataTables.buttons.min.js"></script>
+	 	<script type="text/javascript" charset="utf8" src="/jquery/dataTables.fixedColumns.min.js"></script>
+	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.colVis.min.js"></script>
+	 	<!--<script type="text/javascript" charset="utf8" src="/jquery/buttons.flash.min.js"></script>
+	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.html5.min.js"></script>
+	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.print.min.js"></script>-->
 	</head>
 	<body>
 	<!-- ANFANG Kopfbereich mit TERMWAHL und MENÜ ANFANG -->
@@ -93,6 +103,7 @@
 			</div>
 		</div>
 <!-- ENDE Seitenmenü mit dynamischen Inhalten ENDE -->
+
 <!-- ANFANG Cookie-Speicherung des Menüzustands ANFANG -->
 		<script type="text/javascript">
 
@@ -190,6 +201,7 @@
 		   $.cookie($infocookie, 3, { expires: 7, path: '/' });
 		   infolayout($.cookie($infocookie));
 		});
+
 
 		</script>
 <!-- ENDE Cookie-Speicherung des Menüzustands ENDE -->

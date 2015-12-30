@@ -195,14 +195,17 @@ table#attribution {
    white-space:nowrap;
 }
 
-table#attribution tr:nth-child(even) {
+/*table#attribution tr:nth-child(even) {
     background-color: #eee;
 }
 table#attribution tr:nth-child(odd) {
    background-color:#fff;
-}
+}*/
 
  table#attribution tr:hover { 
-  		background: yellow;
+  		background: #F0FAFC;
 }
 
+td.highlight {
+    background-color: #F0FAFC !important;
+}
