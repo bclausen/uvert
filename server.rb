@@ -114,7 +114,24 @@ post "/profile/name/update" do
  	profile = Profile.get(@profile_id)
   	#Im folgenden wird das Profil aktualisiert (nur der Name)
   	profile.update(:name => @profile_name)
- end
+end
+
+post "/profile/subject_hour/update" do
+	@profile_id = params[:profile_id] 
+	@subject_id = params[:subject_id]
+	@subject_hour = params[:subject_hour]
+
+	profilesubject = Profilesubject.first(:profile_id => @profile_id)#, :subject_id => @subject_id)
+	#Im folgenden wird das Profil aktualisiert (nur der Name)
+	profilesubject.update(:hours => @subject_hour)
+end
+
+post "/profile/class/update" do
+	@profile_id = params[:profile_id]
+	@class_id = params[:class_id]
+	#Achtung: Bestehende Datensätze werden noch verdoppelt, muss Schluss machen
+	Profileassignment.create(:profile_id => @profile_id, :schoolclass_id => @class_id)
+end
 
 get "/profile/:id/edit" do
 	@profile = Profile.get(params[:id])
@@ -129,13 +146,13 @@ get "/profile/:id/edit" do
 			tabledata = "<td>" + subject.name + "</td>"
 		end
 		tabledata = tabledata + "<td>"
-		name_subject_hour_field = subject.id.to_s + "_hours"
+		name_subject_hour_field = @profile.id.to_s + "_" + subject.id.to_s + "_hours"
 		if profile_subject.nil? then
 			hours = '0'
 		else
 			hours = profile_subject.hours
 		end
-		tabledata = tabledata + "<input type='text' name=' " + name_subject_hour_field + "' value =" + hours.to_s + ">"
+		tabledata = tabledata + "<input type='text' name=' " + name_subject_hour_field + "' onchange='getval_profil_subject_hour(this);' value =" + hours.to_s + ">"
 		tabledata = tabledata + "</td>"
 		@subjects_hour_tabledata.push(tabledata)
 	end
@@ -148,7 +165,7 @@ get "/profile/:id/edit" do
 		schoolclasses = Schoolclass.all(:grade_id => grade.id)
 		schoolclasses.each do |schoolclass|
 			profileassignment = Profileassignment.first(:profile_id.like => @profile.id, :schoolclass_id => schoolclass.id)
-			name_class_field = schoolclass.id
+			name_class_field = @profile.id.to_s + "_" + schoolclass.id.to_s
 			if profileassignment.nil? then
 				tabledata = tabledata + "<font color='#CCCCCC'>" + schoolclass.name + "</font>" + "&nbsp"
 				checked = ''
@@ -156,7 +173,7 @@ get "/profile/:id/edit" do
 				tabledata = tabledata +  schoolclass.name + "&nbsp"
 				checked = 'checked' 
 			end
-			tabledata = tabledata + "<input type='checkbox' name='" + name_class_field.to_s + "'" + checked + ">" + "&nbsp"
+			tabledata = tabledata + "<input type='checkbox' name='" + name_class_field.to_s + "'" + checked + " onchange='getval_profil_class(this);'>" + "&nbsp"
 		end
 		tabledata = tabledata + "</td>"
 		@schoolclasses_tabledata.push(tabledata)
