@@ -130,7 +130,12 @@ post "/profile/class/update" do
 	@profile_id = params[:profile_id]
 	@class_id = params[:class_id]
 	#Achtung: Bestehende Datensätze werden noch verdoppelt, muss Schluss machen
-	Profileassignment.create(:profile_id => @profile_id, :schoolclass_id => @class_id)
+	profileassignment = Profileassignment.first(:profile_id => @profile_id, :schoolclass_id => @class_id)
+	if profileassignment.nil? then
+		Profileassignment.create(:profile_id => @profile_id, :schoolclass_id => @class_id)
+	else
+		profileassignment.destroy
+	end
 end
 
 get "/profile/:id/edit" do
