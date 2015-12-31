@@ -1,12 +1,8 @@
 <h1> <%= @profile.name %> </h1>
-<% #profilesubjects = Profilesubject.all(:profile_id.like => @profile.id) %>
-<% #  %>
-<% # Die Einträge und ausgewählte Checkboxen werden wie folgt über params übertragen: %>
-<% #  %>
 <% #  %>
 
 <form action="/profile/<%= @profile.id.to_s %>" method="post">
-	<p>Bezeichnung: <input type="text" name="<%= @profile.id.to_s %>" onchange="getval_profilname(this);" value="<%= @profile.name %>"></p>
+	<p>Bezeichnung: <input type="text" name="<%= @profile.id.to_s %>" onchange="getval_profilname(this);" value="<%= @profile.name %>"><input type="submit" value="Profilname ändern"></p>
 	<input type="hidden" name="_method" value="put">
 	<table id="profile_subject_hours">
 		<th>Fach</th> 
@@ -15,12 +11,12 @@
 			<% for i in 0..((@subjects_hour_tabledata.size)-1) do %>
 				<tr>
 				<%= @subjects_hour_tabledata[i].to_s %>
-				<% if @schoolclasses_tabledata[i] != nil then %>
-					<%= @schoolclasses_tabledata[i] %>
+				<% if @@schoolclasses_tabledata[i] != nil then %>
+					<%= @@schoolclasses_tabledata[i] %>
 				<% end %>
 				</tr>
 			<% end %>
-	<tr><td><input type="submit" value="Profil ändern"></td></tr>
+	<tr><td></td></tr>
 	
 	</table>
 	

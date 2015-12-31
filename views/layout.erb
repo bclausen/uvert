@@ -155,9 +155,7 @@
     	function getval_profilname(sel) {
     		$profile_id = sel.name;
     		$profile_name = sel.value; 
-    		//Zum Testen
-    		//alert(sel.name + ": " + sel.value + "_" + $profile_id + "_" + $profile_name );
-    	
+    		
     		$.ajax({
   				method: "POST",
   				url: "/profile/name/update",
@@ -173,7 +171,7 @@
     		$subject_hour = sel.value;
     		// $profile_name = sel.value; 
     		//Zum Testen
-    		alert(sel.name + ": " + sel.value + " " + $profile_id + " " + $subject_id);
+    		//alert(sel.name + ": " + sel.value + " " + $profile_id + " " + $subject_id);
     	
     		$.ajax({
   				method: "POST",
@@ -188,7 +186,7 @@
     		$profile_id = $profil_class[0];
     		$class_id = $profil_class[1];
     		//Zum Testen
-    		alert(sel.name);
+    		//alert(sel.name);
     		// alert(sel.name + ": " + sel.value + " " + $profile_id + " " + $subject_id);
     	
     		$.ajax({
