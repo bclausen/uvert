@@ -108,51 +108,46 @@ get "/profiles" do
 	erb:profiles
 end
 
+post "/profile/name/update" do
+	@profile_id = params[:profile_id] 
+ 	@profile_name = params[:profile_name]  
+ 	profile = Profile.get(@profile_id)
+  	#Im folgenden wird das Profil aktualisiert (nur der Name)
+  	profile.update(:name => @profile_name)
+end
+
+post "/profile/subject_hour/update" do
+	@profile_id = params[:profile_id] 
+	@subject_id = params[:subject_id]
+	@subject_hour = params[:subject_hour]
+
+	profilesubject = Profilesubject.first(:profile_id => @profile_id)#, :subject_id => @subject_id)
+	#Im folgenden wird das Profil aktualisiert (nur der Name)
+	profilesubject.update(:hours => @subject_hour)
+end
+
+post "/profile/class/update" do
+	@profile_id = params[:profile_id]
+	@class_id = params[:class_id]
+	#Achtung: Bestehende Datensätze werden noch verdoppelt, muss Schluss machen
+	profileassignment = Profileassignment.first(:profile_id => @profile_id, :schoolclass_id => @class_id)
+	if profileassignment.nil? then
+		Profileassignment.create(:profile_id => @profile_id, :schoolclass_id => @class_id)
+	else
+		profileassignment.destroy
+	end
+	@@schoolclasses_tabledata[0].sub!(/[aeiou]/,'*') #Eigentlich müsste jetzt ein a in * geändert werden, klappt aber nicht
+		#Kann nicht @@schoolclasses_tabledata komplet überschrieben werden, z. B. in dem man die Funktion get_profile_schoolclass_tabledata(@profile.id) aufruft?
+end
+
 get "/profile/:id/edit" do
 	@profile = Profile.get(params[:id])
 	@subjects = Subject.all
 	# Erzeuge HTML-Tabellenzellen für Fächer mit Stundenzahl des Profils
-	@subjects_hour_tabledata = []
-	@subjects.each do |subject|
-		profile_subject = Profilesubject.first(:profile_id =>@profile.id, :subject_id => subject.id)
-		if profile_subject.nil? then
-			tabledata = "<td><font color='#CCCCCC'>" + subject.name + "</font></td>"
-		else
-			tabledata = "<td>" + subject.name + "</td>"
-		end
-		tabledata = tabledata + "<td>"
-		name_subject_hour_field = subject.id.to_s + "_hours"
-		if profile_subject.nil? then
-			hours = '0'
-		else
-			hours = profile_subject.hours
-		end
-		tabledata = tabledata + "<input type='text' name=' " + name_subject_hour_field + "' value =" + hours.to_s + ">"
-		tabledata = tabledata + "</td>"
-		@subjects_hour_tabledata.push(tabledata)
-	end
-	###############################
+	@subjects_hour_tabledata = get_profile_subjects_hour_tabledata(@profile.id)
 	# Erzeuge HTML-Tabellenzellen für die Zuordnung von Klassen geordnet nach Jahrgängen
-	@grades = Grade.all
-	@schoolclasses_tabledata = []
-	@grades.each do |grade|
-		tabledata = "<td>"
-		schoolclasses = Schoolclass.all(:grade_id => grade.id)
-		schoolclasses.each do |schoolclass|
-			profileassignment = Profileassignment.first(:profile_id.like => @profile.id, :schoolclass_id => schoolclass.id)
-			name_class_field = schoolclass.id
-			if profileassignment.nil? then
-				tabledata = tabledata + "<font color='#CCCCCC'>" + schoolclass.name + "</font>" + "&nbsp"
-				checked = ''
-			else
-				tabledata = tabledata +  schoolclass.name + "&nbsp"
-				checked = 'checked' 
-			end
-			tabledata = tabledata + "<input type='checkbox' name='" + name_class_field.to_s + "'" + checked + ">" + "&nbsp"
-		end
-		tabledata = tabledata + "</td>"
-		@schoolclasses_tabledata.push(tabledata)
-	end
+	# @grades = Grade.all
+	@@schoolclasses_tabledata = get_profile_schoolclass_tabledata(@profile.id)
 	###############################
 	@schoolclasses = Schoolclass.all
 	erb:profile_edit
@@ -164,14 +159,6 @@ put '/profile/:id' do
   profile = Profile.get(params[:id])
   #Im folgenden wird das Profil aktualisiert (nur der Name)
   profile.update(params[:profile])
-  #Das Aktualisieren der profilassignments und der profilesubjects wird nicht
-  #so einfach, da die datensätze nicht einfach geändert werden müssen, sondern
-  #erst erzeugt bzw. gelöscht werden müssen
-  parameter = params.select {|key, val| not val.empty?}.values
-  #parameter.to_s #Herüber erfolgt keine Ausgabe im Browser 
-   "Hallo" + params.to_s
- # "Hallo" + params[0][0]
-  #redirect ("/profiles")
 end
 
 get '/subject/:id/teachers' do
@@ -270,4 +257,58 @@ helpers do
 			i=i+1
 		end 
 	end
+
+	# Die folgenden Funktionen werden für den view profile_edit benötigt
+	def get_profile_schoolclass_tabledata(profile_id)
+		@grades = Grade.all
+		@schoolclasses_tabledata = []
+		@grades.each do |grade|
+			tabledata = "<td>"
+			schoolclasses = Schoolclass.all(:grade_id => grade.id)
+			schoolclasses.each do |schoolclass|
+				profileassignment = Profileassignment.first(:profile_id.like => profile_id, :schoolclass_id => schoolclass.id)
+				name_class_field = profile_id.to_s + "_" + schoolclass.id.to_s
+				if profileassignment.nil? then
+					tabledata = tabledata + "<font color='#CCCCCC'>" + schoolclass.name + "</font>" + "&nbsp"
+					checked = ''
+				else
+					tabledata = tabledata +  schoolclass.name + "&nbsp"
+					checked = 'checked' 
+				end
+				tabledata = tabledata + "<input type='checkbox' name='" + name_class_field.to_s + "'" + checked + " onchange='getval_profil_class(this);'>" + "&nbsp"
+			end
+			tabledata = tabledata + "</td>"
+			@schoolclasses_tabledata.push(tabledata)
+		end
+		return @schoolclasses_tabledata
+	end
+
+	def get_alter_profile_schoolclass_tabledata(profile_id)
+
+	end
+
+	def get_profile_subjects_hour_tabledata(profile_id)
+		@subjects_hour_tabledata = []
+		@subjects.each do |subject|
+			profile_subject = Profilesubject.first(:profile_id => profile_id, :subject_id => subject.id)
+			if profile_subject.nil? then
+				tabledata = "<td><font color='#CCCCCC'>" + subject.name + "</font></td>"
+			else
+				tabledata = "<td>" + subject.name + "</td>"
+			end
+			tabledata = tabledata + "<td>"
+			name_subject_hour_field = profile_id.to_s + "_" + subject.id.to_s + "_hours"
+			if profile_subject.nil? then
+				hours = '0'
+			else
+				hours = profile_subject.hours
+			end
+			tabledata = tabledata + "<input type='text' name=' " + name_subject_hour_field + "' onchange='getval_profil_subject_hour(this);' value =" + hours.to_s + ">"
+			tabledata = tabledata + "</td>"
+			@subjects_hour_tabledata.push(tabledata)
+		end
+		return @subjects_hour_tabledata
+	end
+
+	##########################################
 end

@@ -150,9 +150,51 @@
   			
     	}
 
-    	<% #Folgende Funktion dient der Aktualisierung des Profils %>
-    	function getval_profil(sel) {
-    		alert(sel.value);
+    	<% #Folgende Funktion dient der Aktualisierung eines ausgwählten Profils %>
+
+    	function getval_profilname(sel) {
+    		$profile_id = sel.name;
+    		$profile_name = sel.value; 
+    		
+    		$.ajax({
+  				method: "POST",
+  				url: "/profile/name/update",
+  				data: { profile_id: $profile_id, profile_name: $profile_name }
+  			})
+
+    	}
+
+    	function getval_profil_subject_hour(sel) {
+    		$profil_subject=sel.name.split("_");
+    		$profile_id = $profil_subject[0];
+    		$subject_id = $profil_subject[1];
+    		$subject_hour = sel.value;
+    		// $profile_name = sel.value; 
+    		//Zum Testen
+    		//alert(sel.name + ": " + sel.value + " " + $profile_id + " " + $subject_id);
+    	
+    		$.ajax({
+  				method: "POST",
+  				url: "/profile/subject_hour/update",
+  				data: { profile_id: $profile_id, subject_id: $subject_id, subject_hour: $subject_hour}
+  			})
+
+    	}
+
+    	function getval_profil_class(sel) {
+    		$profil_class=sel.name.split("_");
+    		$profile_id = $profil_class[0];
+    		$class_id = $profil_class[1];
+    		//Zum Testen
+    		//alert(sel.name);
+    		// alert(sel.name + ": " + sel.value + " " + $profile_id + " " + $subject_id);
+    	
+    		$.ajax({
+  				method: "POST",
+  				url: "/profile/class/update",
+  				data: { profile_id: $profile_id, class_id: $class_id }
+  			})
+
     	}
     	
     	//  AJAX-BEISPIEL
@@ -176,6 +218,8 @@
 			  // }
 		
 			
+
+    	<% ####################################################### %>
 
 		$(document).ready(function(){
 			
