@@ -1,8 +1,12 @@
-<h1> <%= @profile.name %> </h1>
+<h1 id="profile_name" > <%= @profile.name %> </h1>
 <% #  %>
 
 <form action="/profile/<%= @profile.id.to_s %>" method="post">
-	<p>Bezeichnung: <input type="text" name="<%= @profile.id.to_s %>" onchange="getval_profilname(this);" value="<%= @profile.name %>"><input type="submit" value="Profilname ändern"></p>
+	<p>
+		Bezeichnung: <input type="text" name="<%= @profile.id.to_s %>" onchange="getval_profilname(this);" value="<%= @profile.name %>">
+<!-- 		<input type="submit" value="Profilname ändern">
+ -->	
+	</p>
 	<input type="hidden" name="_method" value="put">
 	<table id="profile_subject_hours">
 		<th>Fach</th> 

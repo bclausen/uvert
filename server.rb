@@ -275,10 +275,10 @@ helpers do
 				profileassignment = Profileassignment.first(:profile_id.like => profile_id, :schoolclass_id => schoolclass.id)
 				name_class_field = profile_id.to_s + "_" + schoolclass.id.to_s
 				if profileassignment.nil? then
-					tabledata = tabledata + "<font color='#CCCCCC'>" + schoolclass.name + "</font>" + "&nbsp"
+					tabledata = tabledata + "<font id='" + "class_" + schoolclass.id.to_s + "' color='#CCCCCC'>" + schoolclass.name + "</font>" + "&nbsp"
 					checked = ''
 				else
-					tabledata = tabledata +  schoolclass.name + "&nbsp"
+					tabledata = tabledata + "<font id='" + "class_" + schoolclass.id.to_s + "' color='#000000'>" + schoolclass.name + "</font>" + "&nbsp"
 					checked = 'checked' 
 				end
 				tabledata = tabledata + "<input type='checkbox' name='" + name_class_field.to_s + "'" + checked + " onchange='getval_profil_class(this);'>" + "&nbsp"
@@ -294,9 +294,9 @@ helpers do
 		@subjects.each do |subject|
 			profile_subject = Profilesubject.first(:profile_id => profile_id, :subject_id => subject.id)
 			if profile_subject.nil? then
-				tabledata = "<td><font color='#CCCCCC'>" + subject.name + "</font></td>"
+				tabledata = "<td><font  id='" + "subject_" + subject.id.to_s + "' color='#CCCCCC'>" + subject.name + "</font></td>"
 			else
-				tabledata = "<td>" + subject.name + "</td>"
+				tabledata = "<td><font  id='" + "subject_" + subject.id.to_s + "' color='#000000'>" + subject.name + "</font></td>"
 			end
 			tabledata = tabledata + "<td>"
 			name_subject_hour_field = profile_id.to_s + "_" + subject.id.to_s + "_hours"

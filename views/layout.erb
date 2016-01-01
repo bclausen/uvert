@@ -162,6 +162,9 @@
   				data: { profile_id: $profile_id, profile_name: $profile_name }
   			})
 
+  			//Aktualisieren der HTML-Darstellung
+  			document.getElementById('profile_name').innerHTML = $profile_name;
+
     	}
 
     	function getval_profil_subject_hour(sel) {
@@ -169,16 +172,22 @@
     		$profile_id = $profil_subject[0];
     		$subject_id = $profil_subject[1];
     		$subject_hour = sel.value;
-    		// $profile_name = sel.value; 
     		//Zum Testen
-    		alert(sel.name + ": " + sel.value + " " + $profile_id + "*" + $subject_id);
+    		//alert(sel.name + ": " + sel.value + " " + $profile_id + "*" + $subject_id);
     	
     		$.ajax({
   				method: "POST",
   				url: "/profile/subject_hour/update",
   				data: { profile_id: $profile_id, subject_id: $subject_id, subject_hour: $subject_hour}
   			})
-
+    		//Aktualisieren der HTML-Darstellung
+    		var element_id = "subject_" + $subject_id;
+    		//Nicht-aktiv: Schriftfarbe grau (#CCCCCC), sonst schwarz (#000000)
+    		if ($subject_hour == 0) {
+    			document.getElementById(element_id).color = '#CCCCCC';
+    		} else {
+    			document.getElementById(element_id).color = '#000000';
+    		}		
     	}
 
     	function getval_profil_class(sel) {
@@ -194,7 +203,15 @@
   				url: "/profile/class/update",
   				data: { profile_id: $profile_id, class_id: $class_id }
   			})
-
+    		//Aktualisieren der HTML-Darstellung
+    		var element_id = "class_" + $class_id;
+    		//Nicht-aktiv: Schriftfarbe grau (#CCCCCC), sonst schwarz (#000000)
+    		if (document.getElementById(element_id).color != '#000000') {
+				document.getElementById(element_id).color = '#000000';
+    		} else {
+				document.getElementById(element_id).color = '#CCCCCC';
+    		}
+    		
     	}
     	
     	//  AJAX-BEISPIEL
