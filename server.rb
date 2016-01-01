@@ -117,13 +117,20 @@ post "/profile/name/update" do
 end
 
 post "/profile/subject_hour/update" do
-	@profile_id = params[:profile_id] 
-	@subject_id = params[:subject_id]
-	@subject_hour = params[:subject_hour]
+	profile_id = params[:profile_id].to_i 
+	subject_id = params[:subject_id].to_i
+	subject_hour = params[:subject_hour].to_i
+	profilesubject = Profilesubject.first(:profile_id => profile_id, :subject_id => subject_id)
 
-	profilesubject = Profilesubject.first(:profile_id => @profile_id)#, :subject_id => @subject_id)
-	#Im folgenden wird das Profil aktualisiert (nur der Name)
-	profilesubject.update(:hours => @subject_hour)
+	if profilesubject.nil? then
+		Profilesubject.create(:profile_id => profile_id, :subject_id => subject_id, :hours => subject_hour)
+	else
+		if subject_hour != 0 then
+			profilesubject.update(:hours => subject_hour)
+		else
+			profilesubject.destroy
+		end
+	end
 end
 
 post "/profile/class/update" do
@@ -136,8 +143,6 @@ post "/profile/class/update" do
 	else
 		profileassignment.destroy
 	end
-	@@schoolclasses_tabledata[0].sub!(/[aeiou]/,'*') #Eigentlich müsste jetzt ein a in * geändert werden, klappt aber nicht
-		#Kann nicht @@schoolclasses_tabledata komplet überschrieben werden, z. B. in dem man die Funktion get_profile_schoolclass_tabledata(@profile.id) aufruft?
 end
 
 get "/profile/:id/edit" do
@@ -146,13 +151,13 @@ get "/profile/:id/edit" do
 	# Erzeuge HTML-Tabellenzellen für Fächer mit Stundenzahl des Profils
 	@subjects_hour_tabledata = get_profile_subjects_hour_tabledata(@profile.id)
 	# Erzeuge HTML-Tabellenzellen für die Zuordnung von Klassen geordnet nach Jahrgängen
-	# @grades = Grade.all
 	@@schoolclasses_tabledata = get_profile_schoolclass_tabledata(@profile.id)
 	###############################
 	@schoolclasses = Schoolclass.all
 	erb:profile_edit
 end
 
+#Folgende Route wird eigentlich nicht mehr benötigt, da Profil per Ajax aktualisiert wird
 put '/profile/:id' do
   #Testausgabe der benannten Parameter
   #params[:profile]# + params[:hours].to_s
@@ -160,6 +165,7 @@ put '/profile/:id' do
   #Im folgenden wird das Profil aktualisiert (nur der Name)
   profile.update(params[:profile])
 end
+#####################################################
 
 get '/subject/:id/teachers' do
     get_suggested_teachers_for(params[:id].to_i).to_s
@@ -281,10 +287,6 @@ helpers do
 			@schoolclasses_tabledata.push(tabledata)
 		end
 		return @schoolclasses_tabledata
-	end
-
-	def get_alter_profile_schoolclass_tabledata(profile_id)
-
 	end
 
 	def get_profile_subjects_hour_tabledata(profile_id)
