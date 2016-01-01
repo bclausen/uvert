@@ -174,7 +174,25 @@ put '/profile/:id' do
   #redirect ("/profiles")
 end
 
+get '/subject/:id/teachers' do
+    get_suggested_teachers_for(params[:id].to_i).to_s
+end
+
+
 helpers do
+
+	def get_suggested_teachers_for(subject_id) #Hier wird bisher nur eine Liste der Fachlehrer zurückgegeben. Langfristig sollen es Empfehlungen aufgrund der Unterstunden sein.
+		@subject_teachers=Department.all(:subject_id => subject_id)
+		result="Unterstunden: "
+		@subject_teachers.each do |teacher|	
+			result= result+ Teacher.first(:id => teacher.teacher_id).shortcut.to_s + ", "
+		end
+		result=result[0...-2] + " &Uuml;berstunden: "
+		@subject_teachers.each do |teacher|	
+			result= result+ Teacher.first(:id => teacher.teacher_id).shortcut.to_s + ", "
+		end
+		return result[0...-2]
+	end
 
 	def get_schoolclass_teacher_options(subject_id, schoolclass_id)
 		@subjects = Subject.first(:id => subject_id)
@@ -209,7 +227,7 @@ helpers do
 		@schoolclasses = Schoolclass.all
 		@subjects = Subject.all
 				@subjects.each do |subject|
-					zeile = "<tr> <td>" + subject.name + "</td>"
+					zeile = "<tr> <td><a href='/subject/"+subject.id.to_s+"' title='"+get_suggested_teachers_for(subject.id)+"' class='masterTooltip'>" + subject.name + "</a></td>"
 					@subject_teachers=Department.all(:subject_id => subject.id)
 					@schoolclasses.each do |schoolclass|
 						

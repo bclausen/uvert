@@ -13,9 +13,9 @@
 	 	<script type="text/javascript" charset="utf8" src="/jquery/dataTables.buttons.min.js"></script>
 	 	<script type="text/javascript" charset="utf8" src="/jquery/dataTables.fixedColumns.min.js"></script>
 	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.colVis.min.js"></script>
-	 	<!--<script type="text/javascript" charset="utf8" src="/jquery/buttons.flash.min.js"></script>
+	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.flash.min.js"></script>
 	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.html5.min.js"></script>
-	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.print.min.js"></script>-->
+	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.print.min.js"></script>
 	</head>
 	<body>
 	<!-- ANFANG Kopfbereich mit TERMWAHL und MENÜ ANFANG -->
@@ -154,6 +154,28 @@
     	function getval_profil(sel) {
     		alert(sel.value);
     	}
+    	
+    	//  AJAX-BEISPIEL
+    	//   $.ajaxSetup ({  
+			  //    cache: false  
+			  // });
+
+
+
+			  // $(document).ready(function() { show_suggested_teachers(6); });
+
+
+			  
+			  // function show_suggested_teachers(subject_id) {
+			  //   $.get("/subject/"+subject_id+"/teachers", 
+			  //         function(data) {
+			  //           $("#update-div").html(data);
+			            
+			  //         },
+			  //         'text');
+			  // }
+		
+			
 
 		$(document).ready(function(){
 			
@@ -205,7 +227,31 @@
 
 		</script>
 <!-- ENDE Cookie-Speicherung des Menüzustands ENDE -->
-
+<!-- ANFANG Tooltip zur Anzeige der Empfohlenen Leher in der UV ANFANG-->
+		<script type="text/javascript">
+			$(document).ready(function() {
+			// Tooltip only Text
+				$('.masterTooltip').hover(function(){
+				        // Hover over code
+				        var title = $(this).attr('title');
+				        $(this).data('tipText', title).removeAttr('title');
+				        $('<p class="tooltip"></p>')
+				        .text(title)
+				        .appendTo('body')
+				        .fadeIn('slow');
+				}, function() {
+				        // Hover out code
+				        $(this).attr('title', $(this).data('tipText'));
+				        $('.tooltip').remove();
+				}).mousemove(function(e) {
+				        var mousex = e.pageX + 20; //Get X coordinates
+				        var mousey = e.pageY + 10; //Get Y coordinates
+				        $('.tooltip')
+				        .css({ top: mousey, left: mousex })
+				});
+			});
+		</script>
+<!-- ANFANG Tooltip zur Anzeige der Empfohlenen Leher in der UV ANFANG-->
 	<%= yield %>
 	</body>
 </html>

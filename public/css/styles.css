@@ -203,9 +203,29 @@ table#attribution tr:nth-child(odd) {
 }*/
 
  table#attribution tr:hover { 
-  		background: #F0FAFC;
+  		background: #569ad4;
 }
 
 td.highlight {
-    background-color: #F0FAFC !important;
+    background-color: #569ad4 !important;
 }
+
+td.details-control {
+    background: url('./pics/dreieck.gif') no-repeat center center;
+    cursor: pointer;
+}
+tr.details td.details-control {
+    background: url('./pics/dreieck.gif') no-repeat center center;
+}
+
+.tooltip {
+	display:none;
+	position:absolute;
+	border:1px solid #fff;
+	background-color:#569ad4;
+	border-radius:5px;
+	padding:10px;
+	color:#fff;
+	font-size:12px Arial;
+}
+
