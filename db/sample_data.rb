@@ -158,7 +158,7 @@ profileList = [
 		["Klasse 6 Musik",["6 b"], [["BIO",2],["Bili",1],["CHE",0],["DSP",0],["DEU",4],["DAE",0],["ENG",4],["FRA",0],
 		["GEO",2],["GES",0],["INF",0],["KUN",2],["LAT",0],["MAT",6],["MUS",3],["PHI",0],["PHY",0],
 		["REV",2],["RKA",0],["SEM",0],["SPA",0],["SPO",2],["WPO",0]]],
-		["Klasse 6 DSP",["6 c","6 d"], [["BIO",2],["Bili",1],["CHE",0],["DSP",2],["DEU",4],["DAE",0],["ENG",4],["FRA",0],
+		["Klasse 6 DSP",["6 c"], [["BIO",2],["Bili",1],["CHE",0],["DSP",2],["DEU",4],["DAE",0],["ENG",4],["FRA",0],
 		["GEO",2],["GES",0],["INF",0],["KUN",2],["LAT",0],["MAT",6],["MUS",1],["PHI",0],["PHY",0],
 		["REV",2],["RKA",0],["SEM",0],["SPA",0],["SPO",2],["WPO",0]]],
 		["Klasse 6 Werken",["6 d"], [["BIO",2],["Bili",1],["CHE",0],["DSP",0],["DEU",4],["DAE",0],["ENG",4],["FRA",0],

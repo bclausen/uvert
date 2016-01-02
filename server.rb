@@ -126,9 +126,11 @@ post "/profiles" do
 end
 
 delete "/profiles/:id/delete" do
-	"hallo" + params[:id].to_s
+	#Profil wird gelöscht
 	profile = Profile.first(:id => params[:id])
 	profile.destroy
+	#Profilassignments werden gelöscht
+	#Profilesubjects werden gelöscht
 	redirect to("/profiles")
 end
 
@@ -160,7 +162,6 @@ end
 post "/profile/class/update" do
 	@profile_id = params[:profile_id]
 	@class_id = params[:class_id]
-	#Achtung: Bestehende Datensätze werden noch verdoppelt, muss Schluss machen
 	profileassignment = Profileassignment.first(:profile_id => @profile_id, :schoolclass_id => @class_id)
 	if profileassignment.nil? then
 		Profileassignment.create(:profile_id => @profile_id, :schoolclass_id => @class_id)
@@ -297,7 +298,16 @@ helpers do
 			schoolclasses = Schoolclass.all(:grade_id => grade.id)
 			schoolclasses.each do |schoolclass|
 				profileassignment = Profileassignment.first(:profile_id.like => profile_id, :schoolclass_id => schoolclass.id)
-				name_class_field = profile_id.to_s + "_" + schoolclass.id.to_s
+				class_profilassignment = Profileassignment.first(:schoolclass_id => schoolclass.id)
+				#Folgende Variable zeigt an, ob eine Klasse schon einem Profil zugeordnet ist
+				#In layout.erb in der JS-Funktion getval_profil_class wird dies verwendet.
+				#Eine Klasse darf nur einem Profil zugeordnet werden
+				if class_profilassignment.nil? then
+					class_has_profil = false
+				else
+					class_has_profil = true
+				end
+				name_class_field = profile_id.to_s + "_" + schoolclass.id.to_s + "_" + class_has_profil.to_s
 				if profileassignment.nil? then
 					tabledata = tabledata + "<font id='" + "class_" + schoolclass.id.to_s + "' color='#CCCCCC'>" + schoolclass.name + "</font>" + "&nbsp"
 					checked = ''

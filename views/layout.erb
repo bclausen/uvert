@@ -149,8 +149,8 @@
 			})
   			
     	}
-
-    	<% #Folgende Funktion dient der Aktualisierung eines ausgwählten Profils %>
+    	<% ############################################################## %>
+    	<% #Folgende Funktion dient der Aktualisierung eines ausgewählten Profils %>
 
     	function getval_profilname(sel) {
     		$profile_id = sel.name;
@@ -191,29 +191,36 @@
     	}
 
     	function getval_profil_class(sel) {
-    		$profil_class=sel.name.split("_");
-    		$profile_id = $profil_class[0];
-    		$class_id = $profil_class[1];
+    		$profile_class=sel.name.split("_");
+    		$profile_id = $profile_class[0];
+    		$class_id = $profile_class[1];
+    		$class_has_profile = $profile_class[2];
     		//Zum Testen
-    		//alert(sel.name);
+    		//alert($class_has_profile);
     		// alert(sel.name + ": " + sel.value + " " + $profile_id + " " + $subject_id);
-    	
-    		$.ajax({
-  				method: "POST",
-  				url: "/profile/class/update",
-  				data: { profile_id: $profile_id, class_id: $class_id }
-  			})
-    		//Aktualisieren der HTML-Darstellung
-    		var element_id = "class_" + $class_id;
-    		//Nicht-aktiv: Schriftfarbe grau (#CCCCCC), sonst schwarz (#000000)
-    		if (document.getElementById(element_id).color != '#000000') {
-				document.getElementById(element_id).color = '#000000';
-    		} else {
-				document.getElementById(element_id).color = '#CCCCCC';
-    		}
     		
+    		if ($class_has_profile == 'true') {
+    			alert("Diese Klasse ist schon einem Profil zugeordnet.")
+    		} else {
+
+				$.ajax({
+	  				method: "POST",
+	  				url: "/profile/class/update",
+	  				data: { profile_id: $profile_id, class_id: $class_id }
+	  			})
+	    		//Aktualisieren der HTML-Darstellung
+	    		var element_id = "class_" + $class_id;
+	    		//Nicht-aktiv: Schriftfarbe grau (#CCCCCC), sonst schwarz (#000000)
+	    		if (document.getElementById(element_id).color != '#000000') {
+					document.getElementById(element_id).color = '#000000';
+	    		} else {
+					document.getElementById(element_id).color = '#CCCCCC';
+	    		}
+    		}
+     		
     	}
-    	
+    	<% ############################################################## %>
+
     	//  AJAX-BEISPIEL
     	//   $.ajaxSetup ({  
 			  //    cache: false  
