@@ -105,7 +105,31 @@ end
 
 get "/profiles" do
 	@profiles = Profile.all
+	@schoolclasses = Schoolclass.all
+	@sc_id_without_profile = []
+	@schoolclasses.each do |schoolclass|
+		if Profileassignment.first(:schoolclass_id => schoolclass.id).nil? then
+			@sc_id_without_profile.push(schoolclass)
+		end
+	end
 	erb:profiles
+end
+
+get "/profiles/new" do
+	erb:profile_new
+end
+
+post "/profiles" do
+	active_term = get_active_term
+	profile = Profile.create(name: params[:profile_name], term_id: active_term.id)
+	redirect to("/profile/#{profile.id}/edit")
+end
+
+delete "/profiles/:id/delete" do
+	"hallo" + params[:id].to_s
+	profile = Profile.first(:id => params[:id])
+	profile.destroy
+	redirect to("/profiles")
 end
 
 post "/profile/name/update" do
@@ -311,6 +335,9 @@ helpers do
 		end
 		return @subjects_hour_tabledata
 	end
-
 	##########################################
+
+	def get_active_term
+		return Term.first(:is_active => true)
+	end
 end

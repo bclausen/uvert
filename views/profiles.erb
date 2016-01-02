@@ -1,4 +1,5 @@
-<p>Profile:</p>
+<h1>Profile:</h1> 
+<p> <a href="/profiles/new">Neues Profil anlegen</a></p>
 <table>
 	<!-- Die Termspalte ist nur für die Entwicklung notwendig -->
 	<!-- Essollen nur die zum aktuellen Term gehörigen angezeigt werden -->
@@ -19,8 +20,24 @@
 					<% class_counter= class_counter + 1 %>
 				<% end %>
 			</td>
+			<td>
+				<form action="/profiles/<%= profile.id %>/delete" method="post">
+					<input type="hidden" name="_method" value="delete">
+					<input type="submit" value="Profil löschen">
+				</form>
+			</td>
 		</tr>
 	<% end %>
 </table>
 <p></p>
-<p>Folgende Klassen sind keinem Profil zugeordnet:</p>
+<% if @sc_id_without_profile != nil then %>
+	<p>Folgende Klassen sind keinem Profil zugeordnet:</p>
+	<% sc_counter = 1 %>
+	<% @sc_id_without_profile.each do |sc| %>
+		<%= sc.name %>
+		<% if @sc_id_without_profile.size > sc_counter then %>
+				<%= ", " %>
+		<% end %>
+		<% sc_counter= sc_counter + 1 %>
+	<% end %>
+<% end %>
