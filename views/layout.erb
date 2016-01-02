@@ -6,6 +6,7 @@
 		<link rel="stylesheet" type="text/css" href="/css/datatables.css">
 		<link rel="stylesheet" type="text/css" href="/css/buttons.dataTables.min.css">
 		<link rel="stylesheet" type="text/css" href="/css/fixedColumns.dataTables.min.css">
+		<link rel="stylesheet" type="text/css" href="/css/tooltipster.css" />
 		<script src="/jquery/jquery-2.1.4.js"></script>
 	 	<script src="/jquery/jquery.cookie.js"></script>
 	 	<script src="/jquery/funktionen.js"></script>
@@ -16,6 +17,9 @@
 	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.flash.min.js"></script>
 	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.html5.min.js"></script>
 	 	<script type="text/javascript" charset="utf8" src="/jquery/buttons.print.min.js"></script>
+	 	<script type="text/javascript" src="/jquery/jquery.tooltipster.js"></script>
+	
+	 	
 	</head>
 	<body>
 	<!-- ANFANG Kopfbereich mit TERMWAHL und MENÜ ANFANG -->
@@ -296,29 +300,7 @@
 		</script>
 <!-- ENDE Cookie-Speicherung des Menüzustands ENDE -->
 <!-- ANFANG Tooltip zur Anzeige der Empfohlenen Leher in der UV ANFANG-->
-		<script type="text/javascript">
-			$(document).ready(function() {
-			// Tooltip only Text
-				$('.masterTooltip').hover(function(){
-				        // Hover over code
-				        var title = $(this).attr('title');
-				        $(this).data('tipText', title).removeAttr('title');
-				        $('<p class="tooltip"></p>')
-				        .text(title)
-				        .appendTo('body')
-				        .fadeIn('slow');
-				}, function() {
-				        // Hover out code
-				        $(this).attr('title', $(this).data('tipText'));
-				        $('.tooltip').remove();
-				}).mousemove(function(e) {
-				        var mousex = e.pageX + 20; //Get X coordinates
-				        var mousey = e.pageY + 10; //Get Y coordinates
-				        $('.tooltip')
-				        .css({ top: mousey, left: mousex })
-				});
-			});
-		</script>
+		
 <!-- ANFANG Tooltip zur Anzeige der Empfohlenen Leher in der UV ANFANG-->
 	<%= yield %>
 	</body>

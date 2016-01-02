@@ -192,7 +192,7 @@ put '/profile/:id' do
 end
 #####################################################
 
-get '/subject/:id/teachers' do
+get '/subject/:id/teacher_suggestions' do
     get_suggested_teachers_for(params[:id].to_i).to_s
 end
 
@@ -205,7 +205,7 @@ helpers do
 		@subject_teachers.each do |teacher|	
 			result= result+ Teacher.first(:id => teacher.teacher_id).shortcut.to_s + ", "
 		end
-		result=result[0...-2] + " &Uuml;berstunden: "
+		result=result[0...-2] + " Ueberstunden: "
 		@subject_teachers.each do |teacher|	
 			result= result+ Teacher.first(:id => teacher.teacher_id).shortcut.to_s + ", "
 		end
@@ -245,11 +245,11 @@ helpers do
 		@schoolclasses = Schoolclass.all
 		@subjects = Subject.all
 				@subjects.each do |subject|
-					zeile = "<tr> <td><a href='/subject/"+subject.id.to_s+"' title='"+get_suggested_teachers_for(subject.id)+"' class='masterTooltip'>" + subject.name + "</a></td>"
+					zeile = "<tr> <td><a href='/subject/"+subject.id.to_s+"' id='"+subject.id.to_s+"' class='tooltip'>" + subject.name + "</a></td>"
 					@subject_teachers=Department.all(:subject_id => subject.id)
 					@schoolclasses.each do |schoolclass|
 						
-						zeile = zeile + "<td>"
+						zeile = zeile + " <td>"
 						if Profileassignment.first(schoolclass_id: schoolclass.id) != nil then 
 							@profileassignment_id = Profileassignment.first(schoolclass_id: schoolclass.id).id
 							@options[subject.id]=get_schoolclass_teacher_options(subject.id,schoolclass.id)
