@@ -1,1 +1,14 @@
-<h1> <%= @teacher.lastname %> </h1>
+<h1> <%= @teacher.lastname %>, <%= @teacher.firstname %> (<%= @teacher.shortcut %>) </h1>
+<p>
+	Unterrichtsfächer: 
+	<% departments = Department.all(:teacher_id.like => @teacher.id) %>
+	<% subjects = Subject.all %>
+	<% departments.each do |department| %>
+		<%= Subject.first(:id.like =>department.subject_id).name + ", " %>
+	<% end %>
+</p>
+<h3>Daten des aktuellen Halbjahres: <%= @active_term.name %></h3>
+<p>Unterrichtsverpflichtung:</p>
+<p>Überstunden:</p>
+<p></p>
+<p></p>

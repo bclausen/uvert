@@ -33,6 +33,7 @@ end
 
 get "/teacher/:id" do
 	@teacher = Teacher.get(params[:id])
+	@active_term = get_active_term
 	erb:teacher_show
 end
 
