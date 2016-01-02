@@ -218,14 +218,5 @@ tr.details td.details-control {
     background: url('./pics/dreieck.gif') no-repeat center center;
 }
 
-.tooltip {
-	display:none;
-	position:absolute;
-	border:1px solid #fff;
-	background-color:#569ad4;
-	border-radius:5px;
-	padding:10px;
-	color:#fff;
-	font-size:12px Arial;
-}
+
 
