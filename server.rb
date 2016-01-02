@@ -33,7 +33,7 @@ end
 
 get "/teacher/:id" do
 	@teacher = Teacher.get(params[:id])
-	erb:show_teacher
+	erb:teacher_show
 end
 
 get "/attributions" do
