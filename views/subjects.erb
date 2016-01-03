@@ -1,1 +1,29 @@
+<% @teachers = repository(:default).adapter.select('SELECT * FROM testview') %>
+<p>Lehrkräfte:</p>
+	<table>
+		<th>Nachname</th> <th>Vorname</th><th>Kürzel</th><th>Fächer</th><th>Unterrichtsverpflichtung</th><th>Überstunden</th><th>Unterstunden</th>
+		<% @teachers.each do |teacher| %>
+			<tr>
+				<td> 	
+					<a href="/teacher/<%=teacher.id%>"><%=  teacher.lastname %></a>
 
+				</td>
+				<td> 	
+					<%=  teacher.firstname %>
+				</td>
+				<td> 	
+					<%=  teacher.shortcut %>
+				</td>
+				<td> 	
+					<% @departments = Department.all(:teacher_id.like => teacher.id) %>
+					<% @subjects = Subject.all %>
+					<% @departments.each do |department| %>
+						<%= Subject.first(:id.like =>department.subject_id).name + ", " %>
+					<% end %>
+				</td>
+				<td> 	
+					<%= Workload.first(:teacher_id.like => teacher.id).load %>
+				</td>
+			</tr>
+		<% end %>
+	</table>
