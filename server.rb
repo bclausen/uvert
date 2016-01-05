@@ -16,6 +16,7 @@ require './classes/terms'
 require './classes/workloads'
 require 'dm-core'
 require 'dm-migrations'
+require './helpers/teacher_functions'
 
 DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/uvert.db")
 DataMapper.finalize
@@ -34,6 +35,7 @@ end
 get "/teacher/:id" do
 	@teacher = Teacher.get(params[:id])
 	@active_term = get_active_term
+	@teacher_overtime = get_teacher_overtime(@teacher.id)
 	erb:teacher_show
 end
 
